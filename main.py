@@ -1,6 +1,6 @@
-from GPU import interface
+from API import controller
 
 
-if __name__ == "__main__" :
-    interface.run_interface_summary()
-
+if __name__ == "__main__":
+    controller.init_db()
+    controller.launch()
