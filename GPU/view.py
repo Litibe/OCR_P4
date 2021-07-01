@@ -1,6 +1,7 @@
 from datetime import datetime
 
-from API import models, controller
+from API import controller
+from MODELS import models
 from LANGUAGES import french as language
 
 

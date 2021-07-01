@@ -1,5 +1,3 @@
-from API import controller
-
 #####################
 # MODELS
 STR_PLAYER_1 = "Joueur ID : "
@@ -14,33 +12,43 @@ STR_TOURNAMENT_5 = "tours dont les Id de Rounds sont"
 STR_TOURNAMENT_6 = "selon le contrôle de temps"
 STR_TOURNAMENT_7 = "Description du tournoi : "
 
+STR_MATCH_1 = "Il s'agit du match id n°"
+STR_MATCH_2 = "avec la configuration : "
+STR_SCORE = "avec le score "
+STR_ROUNDS_1 = "Il s'agit du Tour id n°"
+STR_ROUNDS_2 = "avec les match ID N°"
+
 #####################
 # CONTROLLER
-INIT_DATABASE = "--- Initialisation de la base de données ---"
 RETURN_MAIN_MENU = "--- Retour au menu principal ---"
 
 #####################
 # VIEWS
 # MAIN_MENU
-SUMMARY_MAIN_MENU = """\n ♖♖♖ Bienvenue sur le programme de tournoi du Club d'Echec ! ♖♖♖ \n\t Au Sommaire : 
+SUMMARY_MAIN_MENU = """
+-----------------------------------------------------------------------------------------------------
+    ♖♖♖ Bienvenue sur le programme de tournoi du Club d'Echec ! ♖♖♖ 
+        Au Sommaire : 
             Choix 1 : Créer un nouveau tournoi ♖
             Choix 2 : Ajouter un joueur dans la base de données.
             Choix 3 : Accès au Menu RAPPORT
             
             Choix 0 : Sortie du programme
-        """
+-----------------------------------------------------------------------------------------------------"""
 WHAT_DO_YOU_WANT = "Que souhaitez vous faire : "
 ERROR_INPUT_CHOICE = "\n Merci de saisir un choix valide !"
 
 # MENU_TOURNAMENT
-SUMMARY_MENU_TOURNAMENT = "\n\n--- Menu TOURNOI --- " \
-                       "\n" \
-                       "\n\t Choix 1 : Création d'un nouveau Tournoi" \
-                       "\n\t Choix 2 : Ajouter les 8 joueurs au dernier tournoi créé" \
-                       "\n\t Choix 3 : Lancer le tour de jeu" \
-                       "\n\t Choix 4 : Modifier le Classement d'un joueur" \
-                        "\n" \
-                       "\n\t Choix 0 => Retour au menu principal"
+SUMMARY_MENU_TOURNAMENT = """
+-----------------------------------------------------------------------------------------------------
+    --- Menu TOURNOI --- 
+              Choix 1 : Création d'un nouveau Tournoi" 
+              Choix 2 : Ajouter les 8 joueurs au dernier tournoi créé
+              Choix 3 : Lancer le tour de jeu
+              Choix 4 : Modifier le Classement d'un joueur
+                        
+              Choix 0 : Retour au menu principal
+-----------------------------------------------------------------------------------------------------"""
 INFORM_CREATE_TOURNAMENT = "Vous avez sélectionné la création d'un nouveau Tournoi, " \
                            "merci de completer les champs requis : "
 INPUT_TOURNAMENT_NAME = "\n Nom du Tournoi : "
@@ -64,21 +72,23 @@ SEX_PLAYER = "Son Sexe M/F : "
 INFORM_CREATE_PLAYER_INTO_DB = "--- Création du joueur dans la base de données ---"
 
 # RAPPORT
-SUMMARY_MENU_RAPPORT = "\n\n--- Menu RAPPORT --- " \
-                       "" \
-                       "\n\t Choix 11 : Liste de tous les acteurs par ordre alphabétique" \
-                       "\n\t Choix 12 : Liste de tous les acteurs par classement" \
-                       "" \
-                       "\n\t Choix 21 : Liste de tous les joueurs d'un tournoi Par ordre alphabétique" \
-                       "\n\t Choix 22 : Liste de tous les joueurs d'un tournoi Par classement" \
-                       "" \
-                       "\n\t Choix  3 : Liste de tous les tournois" \
-                       "" \
-                       "\n\t Choix  4 : Liste de tous les tours d'un tournoi" \
-                       "" \
-                       "\n\t Choix  5 : Liste de tous les matchs d'un tournoi" \
-                       "\n" \
-                       "\n\t Choix 0 => Retour au menu principal"
+SUMMARY_MENU_RAPPORT = """
+-----------------------------------------------------------------------------------------------------
+    --- Menu RAPPORT ---
+            Liste de tous les acteurs
+                Choix 11 : par ordre alphabétique
+                Choix 12 : par classement
+              
+            Liste de tous les joueurs d'un tournoi 
+                Choix 21 : par ordre alphabétique
+                Choix 22 : par classement
+            
+            Liste de tous les tournois : Choix  3
+            Liste de tous les tours d'un tournoi : Choix  4
+            Liste de tous les matchs d'un tournoi : Choix  5 
+                    
+            Choix 0 => Retour au menu principal
+-----------------------------------------------------------------------------------------------------"""
 RAPPORT_PLAYERS_LIST_BY_ABC_LAST_NAME = "--- Listing des Joueurs - Tri par NOM - ordre Alphabétique  ---"
 RAPPORT_PLAYERS_LIST_BY_ORDER = "--- Listing des Joueurs - Tri par Classement de joueurs ---"
 RAPPORT_TOURNAMENT_LIST_BY_ABC_LAST_NAME = "--- Listing des Joueurs dans un Tournoi " \

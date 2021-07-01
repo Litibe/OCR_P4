@@ -1,7 +1,7 @@
 from LANGUAGES import french as language
-from API import controller
+from API import constants
 
-from sqlalchemy import Column, Integer, String, ForeignKey
+from sqlalchemy import Column, Integer, String, ForeignKey, Date
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 
@@ -9,13 +9,12 @@ from sqlalchemy.orm import relationship
 Base = declarative_base()  # Required for SQLAlchemy
 
 
-# Definition of the Contact class
 class Players(Base):
     __tablename__ = "T_Players"
     player_id = Column(Integer, primary_key=True, autoincrement=True)
     last_name = Column(String)
     first_name = Column(String)
-    birthday = Column(String)
+    birthday = Column(Date)
     sex = Column(String)
     rank = Column(Integer)
 
@@ -34,30 +33,46 @@ class Players(Base):
 class Match(Base):
     __tablename__ = "T_Match"
     match_id = Column(Integer, primary_key=True, autoincrement=True)
-    player1 = Column(Integer, ForeignKey("T_Players.player_id"))
-    result_player1 = Column(Integer)
-    player2 = Column(Integer, ForeignKey("T_Players.player_id"))
-    result_player2 = Column(Integer)
+    id_player1 = Column(Integer, ForeignKey("T_Players.player_id"))
+    player_1 = relationship('Players', foreign_keys="Match.id_player1")
+    result_player_1 = Column(Integer)
+    id_player2 = Column(Integer, ForeignKey("T_Players.player_id"))
+    player_2 = relationship('Players', foreign_keys="Match.id_player2")
+    result_player_2 = Column(Integer)
 
     def __str__(self):
-        return f"""Il s'agit du match id n° {self.id} avec le score 
-                {self.player1} - {self.result_player1} 
-                &
-                {self.player2} - {self.result_player2}
+        return f"""{language.STR_MATCH_1} {self.id} {language.STR_MATCH_2} 
+                {self.player_1.player_id} - {self.player1.last_name} {self.player1.first_name} 
+                {language.STR_SCORE} {self.result_player_1} 
+                VS
+                {self.player_2.player_id} - - {self.player1.last_name} {self.player1.first_name} 
+                {language.STR_SCORE} {self.result_player_2}
                 """
 
 
 class Rounds(Base):
     __tablename__ = "T_Rounds"
     round_id = Column(Integer, primary_key=True, autoincrement=True)
-    match1 = Column(Integer, ForeignKey("T_Match.match_id"))
-    match2 = Column(Integer, ForeignKey("T_Match.match_id"))
-    match3 = Column(Integer, ForeignKey("T_Match.match_id"))
-    match4 = Column(Integer, ForeignKey("T_Match.match_id"))
+    match1_id = Column(Integer, ForeignKey("T_Match.match_id"))
+    match1_details = relationship("Match", foreign_keys="Rounds.match1_id")
+    match2_id = Column(Integer, ForeignKey("T_Match.match_id"))
+    match2_details = relationship("Match", foreign_keys="Rounds.match2_id")
+    match3_id = Column(Integer, ForeignKey("T_Match.match_id"))
+    match3_details = relationship("Match", foreign_keys="Rounds.match3_id")
+    match4_id = Column(Integer, ForeignKey("T_Match.match_id"))
+    match4_details = relationship("Match", foreign_keys="Rounds.match4_id")
 
     def __str__(self):
-        return f"""Il s'agit du Tour id n° {self.id} avec les match ID N°
-                    {self.match1} - {self.match2} - {self.match3} - {self.match4}
+        return f"""{language.STR_ROUNDS_1} {self.id} {language.STR_ROUNDS_1}
+                    Match1 id N°{self.match1_id} :
+                        {self.match1_details.player_1.last_name} {self.match1_details.player_1.first_name}
+                        {self.match1_details.result_player_1}
+                        VS
+                        {self.match1_details.player_2.last_name} {self.match1_details.player_2.first_name}
+                        {self.match1_details.result_player_2}
+                    Match2 id N°{self.match2_id} -
+                    Match3 id N°{self.match3_id} -
+                    Match4 id N°{self.match4_id} -
                 """
 
 
@@ -110,27 +125,49 @@ class Tournament(Base):
     tournament_id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String)
     location = Column(String)
-    date = Column(String)
+    date_started = Column(Date)
+    date_finished = Column(Date)
     number_of_rounds = Column(Integer)
     time_controller = Column(String)
     description = Column(String)
-    rounds = Column(Integer, ForeignKey("T_Rounds.round_id"))
+    rounds1 = Column(Integer, ForeignKey("T_Rounds.round_id"))
+    rounds_details_1 = relationship("Rounds", foreign_keys="Tournament.rounds1")
+    rounds2 = Column(Integer, ForeignKey("T_Rounds.round_id"))
+    rounds_details_2 = relationship("Rounds", foreign_keys="Tournament.rounds2")
+    rounds3 = Column(Integer, ForeignKey("T_Rounds.round_id"))
+    rounds_details_3 = relationship("Rounds", foreign_keys="Tournament.rounds3")
+    rounds4 = Column(Integer, ForeignKey("T_Rounds.round_id"))
+    rounds_details_4 = relationship("Rounds", foreign_keys="Tournament.rounds4")
 
-    def __init__(self, name, location, date, number_of_rounds, time_controller, description, rounds):
+
+    def __init__(self, name, location, date, number_of_rounds, time_controller, description):
         self.name = name
         self.location = location
         self.date = date
         self.number_of_rounds = number_of_rounds
         self.time_controller = time_controller
         self.description = description
-        self.id_rounds = rounds
+
+    def add_rounds1(self,rounds1):
+        self.rounds1 = rounds1
+
+    def add_rounds2(self,rounds2):
+        self.rounds2 = rounds2
+
+    def add_rounds3(self,rounds3):
+        self.rounds3 = rounds3
+
+    def add_rounds4(self,rounds4):
+        self.rounds4 = rounds4
 
     def __str__(self):
         return f"""
                 \n{language.STR_TOURNAMENT_1} {self.tournament_id} :\n
                 {language.STR_TOURNAMENT_2} {self.name}
                 {language.STR_TOURNAMENT_3} {self.date} - {self.location}
-                {language.STR_TOURNAMENT_4} {controller.NUMBER_OF_ROUNDS} {language.STR_TOURNAMENT_5} {self.rounds}
+                {language.STR_TOURNAMENT_4} {constants.NUMBER_OF_ROUNDS} 
+                {language.STR_TOURNAMENT_5} {self.rounds_details_1}
+                #verifier si details rounds 1
                 {language.STR_TOURNAMENT_6} {self.time_controller}
                 {language.STR_TOURNAMENT_7} {self.description}
                 """

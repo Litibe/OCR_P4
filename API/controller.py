@@ -1,12 +1,13 @@
-from API import models as models
+from MODELS import models as models
 from GPU import view
 from LANGUAGES import french as language
 
 from sqlalchemy import create_engine, MetaData
 from sqlalchemy.orm import sessionmaker
 
-NUMBER_OF_ROUNDS = 4
+
 ENGINE = create_engine('sqlite:///sql.db', echo=False)
+
 
 def generate_rapport(name_class,order):
     Session = sessionmaker(bind=ENGINE)
@@ -15,7 +16,6 @@ def generate_rapport(name_class,order):
     return listing
 
 def init_db():
-    print(language.INIT_DATABASE)
     metadata = MetaData(ENGINE)
     models.Base.metadata.create_all(ENGINE)
 
@@ -51,7 +51,8 @@ def main_rapport():
 
         elif response_user == 21:
             # players by last_name in tournament
-            listing = generate_rapport(models.PlayersForTournament, models.PlayersForTournament.id_players_for_tournament)
+            listing = generate_rapport(models.PlayersForTournament,
+                                       models.PlayersForTournament.id_players_for_tournament)
             view.listing_rapport(language.RAPPORT_TOURNAMENT_LIST_BY_ABC_LAST_NAME, listing)
 
         elif response_user == 22:
@@ -87,7 +88,6 @@ def main_create_tournament():
 
         if response_user == 1:
             tournament = view.create_tournament()
-            print(language.INFORM_CREATE_TOURNAMENT_INTO_DB)
             Session = sessionmaker(bind=ENGINE)
             session = Session()
             session.add(tournament)
@@ -95,23 +95,17 @@ def main_create_tournament():
 
         elif response_user == 2:
             tournament_id_players = view.create_players_for_tournament()
-            players = models.PlayersForTournament(int(tournament_id_players[0]), tournament_id_players[1],
+            players = models.PlayersForTournament(tournament_id_players[0], tournament_id_players[1],
                                                   tournament_id_players[2], tournament_id_players[3],
                                                   tournament_id_players[4], tournament_id_players[5],
                                                   tournament_id_players[6], tournament_id_players[7])
-            print(players)
             Session = sessionmaker(bind=ENGINE)
             session = Session()
             session.add(players)
             session.commit()
-            print(language.INFORM_CREATE_PLAYERS_TOURNAMENT_INTO_DB)
 
         elif response_user == 0:
             execute = False
-
-
-
-
 
 
 def launch():
@@ -129,7 +123,6 @@ def launch():
             # view create player
             player_name, player_first_name, player_birthday, player_sexe = view.menu_add_player()
             player = models.Players(player_name, player_first_name, player_birthday, player_sexe)
-            print(language.INFORM_CREATE_PLAYER_INTO_DB)
             Session = sessionmaker(bind=ENGINE)
             session = Session()
             session.add(player)
