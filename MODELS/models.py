@@ -27,7 +27,8 @@ class Players(Base):
 
     def __str__(self):
         return f"{language.STR_PLAYER_1}{self.player_id} - {self.last_name} " \
-               f"{self.first_name} - {self.birthday} - {self.sex}"
+               f"{self.first_name} - {self.birthday} - {self.sex}" \
+               f"{language.STR_PLAYER_RANK} {self.rank} {language.STR_PLAYER_RANK2} "
 
 
 class Match(Base):

@@ -1,19 +1,37 @@
 from MODELS import models as models
 from GPU import view
 from LANGUAGES import french as language
+from API import constants
 
 from sqlalchemy import create_engine, MetaData
 from sqlalchemy.orm import sessionmaker
-
+from fpdf import FPDF
+from time import sleep
+import os
+import subprocess
 
 ENGINE = create_engine('sqlite:///sql.db', echo=False)
 
 
-def generate_rapport(name_class,order):
+def generate_rapport(name_class, order, title):
     Session = sessionmaker(bind=ENGINE)
     session = Session()
     listing = session.query(name_class).order_by(order)
+    document = FPDF()
+    document.add_page()
+    document.set_font('helvetica', size=12)
+    document.set_title(title)
+    document.cell(txt=title)
+    document.ln(10)
+    for element in listing:
+        document.cell(txt=str(element))
+        document.ln(5)
+    path = os.path.join(constants.EXPORT_DIR, "listing.pdf")
+    document.output(path)
+    sleep(1)
+    subprocess.run(['open', path], check=True)
     return listing
+
 
 def init_db():
     metadata = MetaData(ENGINE)
@@ -41,38 +59,45 @@ def main_rapport():
 
         if response_user == 11:
             # players by abc_order
-            listing = generate_rapport(models.Players, models.Players.last_name)
+            listing = generate_rapport(models.Players, models.Players.last_name,
+                                       language.RAPPORT_PLAYERS_LIST_BY_ABC_LAST_NAME)
             view.listing_rapport(language.RAPPORT_PLAYERS_LIST_BY_ABC_LAST_NAME, listing)
 
         elif response_user == 12:
             # players by rank
-            listing = generate_rapport(models.PlayersForTournament, models.Players.rank)
+            listing = generate_rapport(models.Players, models.Players.rank,
+                                       language.RAPPORT_PLAYERS_LIST_BY_ORDER)
             view.listing_rapport(language.RAPPORT_PLAYERS_LIST_BY_ORDER, listing)
 
         elif response_user == 21:
             # players by last_name in tournament
             listing = generate_rapport(models.PlayersForTournament,
-                                       models.PlayersForTournament.id_players_for_tournament)
+                                       models.PlayersForTournament.id_players_for_tournament,
+                                       language.RAPPORT_TOURNAMENT_LIST_BY_ABC_LAST_NAME)
             view.listing_rapport(language.RAPPORT_TOURNAMENT_LIST_BY_ABC_LAST_NAME, listing)
 
         elif response_user == 22:
             # players by rank in tournament
-            listing = generate_rapport(models.Tournament.tournament_id, models.Players.rank)
+            listing = generate_rapport(models.Tournament.tournament_id, models.Players.rank,
+                                       language.RAPPORT_TOURNAMENT_LIST_BY_ORDER)
             view.listing_rapport(language.RAPPORT_TOURNAMENT_LIST_BY_ORDER, listing)
 
         elif response_user == 3:
             # list tournament by id
-            listing = generate_rapport(models.Tournament, models.Tournament.tournament_id)
+            listing = generate_rapport(models.Tournament, models.Tournament.tournament_id,
+                                       language.RAPPORT_TOURNAMENT_LIST_ALL)
             view.listing_rapport(language.RAPPORT_TOURNAMENT_LIST_ALL, listing)
 
         elif response_user == 4:
             # list rounds by tournament
-            listing = generate_rapport(models.Tournament, models.Tournament.rounds)
+            listing = generate_rapport(models.Tournament, models.Tournament.rounds,
+                                       language.RAPPORT_LIST_ROUNDS_OF_TOURNAMENT)
             view.listing_rapport(language.RAPPORT_LIST_ROUNDS_OF_TOURNAMENT, listing)
 
         elif response_user == 5:
             # list matchs by tournament
-            listing = generate_rapport(models.Tournament, models.Tournament.rounds.matchs)
+            listing = generate_rapport(models.Tournament, models.Tournament.rounds.matchs,
+                                       language.RAPPORT_LIST_MATCHS_OF_TOURNAMENT)
             view.listing_rapport(language.RAPPORT_LIST_MATCHS_OF_TOURNAMENT, listing)
 
         elif response_user == 0:
@@ -115,7 +140,7 @@ def launch():
         view.main_menu()
         response_user = control_response_user(view.input_what_do_you_want)
 
-        if response_user == 1 :
+        if response_user == 1:
             # view create tournament
             main_create_tournament()
 

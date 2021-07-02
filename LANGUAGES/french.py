@@ -3,6 +3,8 @@
 STR_PLAYER_1 = "Joueur ID : "
 STR_PLAYER_2 = " né(e) le "
 STR_PLAYER_3 = "  de sexe "
+STR_PLAYER_RANK = " - avec un classement de"
+STR_PLAYER_RANK2 = "points"
 
 STR_TOURNAMENT_1 = "Voici les détails du tournoi de l'ID N°"
 STR_TOURNAMENT_2 = "Nom du tournoi :"
@@ -37,6 +39,8 @@ SUMMARY_MAIN_MENU = """
 -----------------------------------------------------------------------------------------------------"""
 WHAT_DO_YOU_WANT = "Que souhaitez vous faire : "
 ERROR_INPUT_CHOICE = "\n Merci de saisir un choix valide !"
+ERROR_INPUT_DATE = "\n Merci de saisir une date valide !"
+
 
 # MENU_TOURNAMENT
 SUMMARY_MENU_TOURNAMENT = """
@@ -68,7 +72,7 @@ INFORM_CREATE_PLAYER = "Vous avez sélectionné la création d'un nouveau Joueur
 LAST_NAME_PLAYER = "Le NOM du Joueur : "
 FIRST_NAME_PLAYER = "Le PRENOM du Joueur : "
 BIRTHDAY_PLAYER = "Sa Date de naissance au format dd/mm/yyyy : "
-SEX_PLAYER = "Son Sexe M/F : "
+SEX_PLAYER = "Son Sexe M ou F : "
 INFORM_CREATE_PLAYER_INTO_DB = "--- Création du joueur dans la base de données ---"
 
 # RAPPORT
