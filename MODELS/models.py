@@ -1,7 +1,7 @@
 from LANGUAGES import french as language
 from API import constants
 
-from sqlalchemy import Column, Integer, String, ForeignKey, Date
+from sqlalchemy import Column, Integer, String, ForeignKey, Date, sql
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 
@@ -41,12 +41,18 @@ class Match(Base):
     player_2 = relationship('Players', foreign_keys="Match.id_player2")
     result_player_2 = Column(Integer)
 
+    def __init__(self, id_player1, result_player_1, id_player2, result_player_2):
+        self.id_player1 = id_player1
+        self.result_player_1 = result_player_1
+        self.id_player2 = id_player2
+        self.result_player_2 = result_player_2
+
     def __str__(self):
-        return f"""{language.STR_MATCH_1} {self.id} {language.STR_MATCH_2} 
-                {self.player_1.player_id} - {self.player1.last_name} {self.player1.first_name} 
+        return f"""{language.STR_MATCH_1} {self.match_id} {language.STR_MATCH_2} 
+                {self.player_1.player_id} - {self.player_1.last_name} {self.player_1.first_name} 
                 {language.STR_SCORE} {self.result_player_1} 
                 VS
-                {self.player_2.player_id} - - {self.player1.last_name} {self.player1.first_name} 
+                ID N°{self.player_2.player_id} - - {self.player_2.last_name} {self.player_2.first_name} 
                 {language.STR_SCORE} {self.result_player_2}
                 """
 
@@ -54,6 +60,15 @@ class Match(Base):
 class Rounds(Base):
     __tablename__ = "T_Rounds"
     round_id = Column(Integer, primary_key=True, autoincrement=True)
+    link_tournament_id = Column(Integer, ForeignKey("T_Tournament.tournament_id"))
+
+    name_round = Column(String)
+    tournament_details = relationship("Tournament", foreign_keys="Rounds.link_tournament_id")
+    date_started = Column(Date)
+    hours_started = Column(String)
+    date_finished = Column(Date, nullable=True)
+    hours_finished = Column(String, nullable=True)
+
     match1_id = Column(Integer, ForeignKey("T_Match.match_id"))
     match1_details = relationship("Match", foreign_keys="Rounds.match1_id")
     match2_id = Column(Integer, ForeignKey("T_Match.match_id"))
@@ -63,23 +78,26 @@ class Rounds(Base):
     match4_id = Column(Integer, ForeignKey("T_Match.match_id"))
     match4_details = relationship("Match", foreign_keys="Rounds.match4_id")
 
+    def __init__(self, name_round, date_started, hours_started):
+        self.name_round = name_round
+        self.date_started = date_started
+        self.hours_started = hours_started
+        self.date_finished = sql.null()
+
     def __str__(self):
-        return f"""{language.STR_ROUNDS_1} {self.id} {language.STR_ROUNDS_1}
-                    Match1 id N°{self.match1_id} :
-                        {self.match1_details.player_1.last_name} {self.match1_details.player_1.first_name}
-                        {self.match1_details.result_player_1}
-                        VS
-                        {self.match1_details.player_2.last_name} {self.match1_details.player_2.first_name}
-                        {self.match1_details.result_player_2}
-                    Match2 id N°{self.match2_id} -
-                    Match3 id N°{self.match3_id} -
-                    Match4 id N°{self.match4_id} -
+        return f"""{language.STR_ROUNDS_1} {self.round_id} {language.STR_ROUNDS_2}
+        {self.date_started} - {self.hours_started} 
+                    Match1 id N°{self.match1_id} : {self.match1_details}
+                    Match2 id N°{self.match2_id} : {self.match2_details}
+                    Match3 id N°{self.match3_id} : {self.match3_details}
+                    Match4 id N°{self.match4_id} : {self.match4_details}
+        {self.date_finished} - {self.hours_finished} 
                 """
 
 
-class PlayersForTournament(Base) :
+class PlayersForTournament(Base):
     __tablename__ = "T_PlayersForTournament"
-    id_players_for_tournament = Column(Integer, primary_key=True, autoincrement=True)
+    players_tournament_id = Column(Integer, primary_key=True, autoincrement=True)
     id_player1 = Column(Integer, ForeignKey("T_Players.player_id"))
     player_1 = relationship('Players', foreign_keys="PlayersForTournament.id_player1")
     id_player2 = Column(Integer, ForeignKey("T_Players.player_id"))
@@ -108,17 +126,24 @@ class PlayersForTournament(Base) :
         self.id_player8 = id8
 
     def __str__(self):
-        return f"""
-                Voici les ID de joueurs présents lors du Tournoi 
-                {self.id_player1} - {self.player_1.last_name} - {self.player_1.first_name}
-                {self.id_player2} - {self.player_2.last_name} - {self.player_2.first_name}
-                {self.id_player3} - {self.player_3.last_name} - {self.player_3.first_name}
-                {self.id_player4} - {self.player_4.last_name} - {self.player_4.first_name}
-                {self.id_player5} - {self.player_5.last_name} - {self.player_5.first_name}
-                {self.id_player6} - {self.player_6.last_name} - {self.player_6.first_name}
-                {self.id_player7} - {self.player_7.last_name} - {self.player_7.first_name}
-                {self.id_player8} - {self.player_8.last_name} - {self.player_8.first_name}
-                """
+        return f"\n{language.STR_PLAYER_TOURNAMENT_1} {self.players_tournament_id} : \
+                \n\tID N°{self.id_player1} - {self.player_1.last_name} {self.player_1.first_name} " \
+               f"{language.STR_PLAYER_TOURNAMENT_rank} {self.player_1.rank} \
+                \n\tID N°{self.id_player2} - {self.player_2.last_name} {self.player_2.first_name} " \
+               f"{language.STR_PLAYER_TOURNAMENT_rank} {self.player_2.rank} \
+                \n\tID N°{self.id_player3} - {self.player_3.last_name} {self.player_3.first_name} " \
+               f"{language.STR_PLAYER_TOURNAMENT_rank} {self.player_3.rank} \
+                \n\tID N°{self.id_player4} - {self.player_4.last_name} {self.player_4.first_name} " \
+               f"{language.STR_PLAYER_TOURNAMENT_rank} {self.player_4.rank} \
+                \n\tID N°{self.id_player5} - {self.player_5.last_name} {self.player_5.first_name} " \
+               f"{language.STR_PLAYER_TOURNAMENT_rank} {self.player_5.rank} \
+                \n\tID N°{self.id_player6} - {self.player_6.last_name} {self.player_6.first_name} " \
+               f"{language.STR_PLAYER_TOURNAMENT_rank} {self.player_6.rank} \
+                \n\tID N°{self.id_player7} - {self.player_7.last_name} {self.player_7.first_name} " \
+               f"{language.STR_PLAYER_TOURNAMENT_rank} {self.player_7.rank} \
+                \n\tID N°{self.id_player8} - {self.player_8.last_name} {self.player_8.first_name} " \
+               f"{language.STR_PLAYER_TOURNAMENT_rank} {self.player_8.rank} \
+                "
 
 
 class Tournament(Base):
@@ -127,10 +152,14 @@ class Tournament(Base):
     name = Column(String)
     location = Column(String)
     date_started = Column(Date)
-    date_finished = Column(Date)
+    hours_started = Column(String)
+    date_finished = Column(Date, nullable=True)
+    hours_finished = Column(String, nullable=True)
     number_of_rounds = Column(Integer)
     time_controller = Column(String)
     description = Column(String)
+    players = Column(Integer, ForeignKey("T_PlayersForTournament.players_tournament_id"))
+    listing_players = relationship("PlayersForTournament", foreign_keys="Tournament.players")
     rounds1 = Column(Integer, ForeignKey("T_Rounds.round_id"))
     rounds_details_1 = relationship("Rounds", foreign_keys="Tournament.rounds1")
     rounds2 = Column(Integer, ForeignKey("T_Rounds.round_id"))
@@ -140,37 +169,26 @@ class Tournament(Base):
     rounds4 = Column(Integer, ForeignKey("T_Rounds.round_id"))
     rounds_details_4 = relationship("Rounds", foreign_keys="Tournament.rounds4")
 
-
-    def __init__(self, name, location, date, number_of_rounds, time_controller, description):
+    def __init__(self, name, location, date_started, hours_started, number_of_rounds, time_controller, description):
         self.name = name
         self.location = location
-        self.date = date
+        self.date_started = date_started
+        self.hours_started = hours_started
         self.number_of_rounds = number_of_rounds
         self.time_controller = time_controller
         self.description = description
-
-    def add_rounds1(self,rounds1):
-        self.rounds1 = rounds1
-
-    def add_rounds2(self,rounds2):
-        self.rounds2 = rounds2
-
-    def add_rounds3(self,rounds3):
-        self.rounds3 = rounds3
-
-    def add_rounds4(self,rounds4):
-        self.rounds4 = rounds4
+        self.date_finished = sql.null()
 
     def __str__(self):
-        return f"""
-                \n{language.STR_TOURNAMENT_1} {self.tournament_id} :\n
-                {language.STR_TOURNAMENT_2} {self.name}
-                {language.STR_TOURNAMENT_3} {self.date} - {self.location}
-                {language.STR_TOURNAMENT_4} {constants.NUMBER_OF_ROUNDS} 
-                {language.STR_TOURNAMENT_5} {self.rounds_details_1}
-                #verifier si details rounds 1
-                {language.STR_TOURNAMENT_6} {self.time_controller}
-                {language.STR_TOURNAMENT_7} {self.description}
-                """
-
-
+        if self.listing_players is None:
+            self.listing_players_tournament = ""
+        else:
+            self.listing_players_tournament = self.listing_players
+        return f"{language.STR_TOURNAMENT_1} {self.tournament_id} : \
+                 \n\t{language.STR_TOURNAMENT_2} {self.name} \
+                 \n\t{language.STR_TOURNAMENT_3} {self.date_started}-{self.hours_started} - {self.location} \
+                 \n\t{language.STR_TOURNAMENT_4}{constants.NUMBER_OF_ROUNDS} {language.STR_TOURNAMENT_5} \
+                 \n\t{language.STR_TOURNAMENT_6} {self.time_controller} \
+                 \n\t{language.STR_TOURNAMENT_7} {self.description} \
+                 {self.listing_players_tournament} \
+                "
