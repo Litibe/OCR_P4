@@ -1,6 +1,7 @@
 from API import controller
+from API.app import sql
 
 
 if __name__ == "__main__":
-    controller.init_db()
+    sql.init_db()
     controller.launch()

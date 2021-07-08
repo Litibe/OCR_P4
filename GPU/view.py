@@ -1,8 +1,6 @@
 import datetime
 from time import sleep
 
-from API import constants
-from MODELS import models
 from LANGUAGES import french as language
 
 
@@ -16,7 +14,7 @@ def error_input_choice():
     print(language.ERROR_INPUT_CHOICE)
 
 
-def add_player_for_tournament(i):
+def input_player_for_tournament(i):
     player = input(f"ID player{i} : ")
     return player
 
@@ -33,46 +31,26 @@ def confirm_listing_players_tournaments(listing_players):
     print(language.LISTING_PLAYERS_TO_CONFIRM)
     for element in listing_players:
         print(element)
-    input_confir = input(language.CONFIRM_INPUT)
-    return input_confir
+    input_confirm = input(language.CONFIRM_INPUT)
+    return input_confirm
 
 
-def create_tournament():
-    print(language.INFORM_CREATE_TOURNAMENT)
-    tournament_name = str(input(language.INPUT_TOURNAMENT_NAME))
-    tournament_location = str(input(language.INPUT_TOURNAMENT_LOCATION))
-    date_now = datetime.datetime.now(constants.TIME_ZONE)
-    tournament_date_started = date_now.strftime("%d/%m/%Y")
-    tournament_date_started = datetime.datetime.strptime(tournament_date_started, '%d/%m/%Y')
-    tournament_hours_started = date_now.strftime("%H:%M")
+def input_tournament_name_location():
+    print(language.CREATE_NEW_TOURNAMENT)
+    name = str(input(language.INPUT_TOURNAMENT_NAME))
+    location = str(input(language.INPUT_TOURNAMENT_LOCATION))
+    return name, location
+
+
+def input_tournament_choice_time():
     print(language.SELECT_CONTROL_TIME)
-    i = 1
-    for element in language.CHOICE_TIME:
-        print(f" \t Choix {i} pour {element}")
-        i += 1
-    tournament_time_controller = ""
-    while tournament_time_controller not in language.CHOICE_TIME:
-        try:
-            choix = int(input("Merci de faire votre choix :"))
-            if choix == 1:
-                tournament_time_controller = language.CHOICE_TIME[choix - 1]
-            elif choix == 2:
-                tournament_time_controller = language.CHOICE_TIME[choix - 1]
-            elif choix == 3:
-                tournament_time_controller = language.CHOICE_TIME[choix - 1]
-            else:
-                pass
-        except TypeError:
-            print(language.ERROR_INPUT_CHOICE)
-        except ValueError:
-            print(language.ERROR_INPUT_CHOICE)
+    choice_time = int(input("Merci de faire votre choix :"))
+    return choice_time
 
-    tournoi_description = str(input(language.INPUT_DESCRIPTION_TOURNAMENT))
 
-    tournament = models.Tournament(tournament_name, tournament_location,
-                                   tournament_date_started, tournament_hours_started, constants.NUMBER_OF_ROUNDS,
-                                   tournament_time_controller, tournoi_description)
-    return tournament
+def input_tournament_description():
+    description = str(input(language.INPUT_DESCRIPTION_TOURNAMENT))
+    return description
 
 
 def main_menu():
@@ -84,6 +62,7 @@ def main_menu_tournament():
 
 
 def create_new_tournament():
+    print(language.LAST_TOURNAMENT_NONE)
     print(language.CREATE_NEW_TOURNAMENT)
 
 
@@ -128,7 +107,8 @@ def menu_add_player():
     while not isinstance(player_birthday, datetime.datetime):
         player_birthday = (input(language.BIRTHDAY_PLAYER))
         try:
-            player_birthday = datetime.datetime.strptime(player_birthday, '%d/%m/%Y')
+            player_birthday = datetime.datetime.strptime(player_birthday,
+                                                         '%d/%m/%Y')
         except ValueError:
             print(language.ERROR_INPUT_DATE)
     player_sexe = ""
@@ -141,7 +121,8 @@ def listing_rapport(language_rapport, listing):
     print(language_rapport)
     for element in listing:
         print(element)
-    print("----------------------------------------------------------------------------")
+    print(
+        "-------------------------------------------------------------")
     sleep(2)
 
 
@@ -166,34 +147,46 @@ def rounds1_none():
     print(language.ROUNDS1_NONE)
 
 
-def str_round(round):
-    print(round)
+def rounds2_none():
+    print(language.ROUNDS2_NONE)
+
+
+def rounds3_none():
+    print(language.ROUNDS3_NONE)
+
+
+def rounds4_none():
+    print(language.ROUNDS4_NONE)
+
+
+def str_round(show_round):
+    print(show_round)
 
 
 def generate_round1(players_listing):
-    print("Match1")
-    print(players_listing[0] + " VS " + players_listing[4])
-    print("Match2")
-    print(players_listing[1] + " VS " + players_listing[5])
-    print("Match3")
-    print(players_listing[2] + " VS " + players_listing[6])
-    print("Match4")
-    print(players_listing[3] + " VS " + players_listing[7])
+    print(f""" {language.ROUNDS1_NONE} : 
+    Match1 : {players_listing[0]} VS {players_listing[4]}
+    Match2 : {players_listing[1]} VS {players_listing[5]}
+    Match3 : {players_listing[2]} VS {players_listing[6]}
+    Match4 : {players_listing[3]} VS {players_listing[7]}
+    \t{language.READY_GO}
+        """)
 
 
-def input_score_match(number_match, number_player, name):
-    print(language.INPUT_SCORE_MATCH + str(number_match) + " " + language.WITH_PLAYER + str(number_player) + " :")
-    print(name)
+def input_score_match(match_number, name_player):
+    print(f"{language.INPUT_SCORE_MATCH} "
+          f"{str(match_number)}"
+          f"{language.WITH_PLAYER}"
+          f"{name_player} :"
+          )
     result = ""
     while result not in [1, 2, 3]:
         try:
             result = int(input(language.CHOICE_SCORE))
-        except TypeError:
+        except ValueError:
             print(language.ERROR_INPUT_CHOICE)
     if result == 2:
         result = 0.5
     elif result == 3:
         result = 0
-    else:
-        pass
     return result
