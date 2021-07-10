@@ -42,6 +42,13 @@ def input_tournament_name_location():
     return name, location
 
 
+def choice_update_rank_player():
+    print(language.CHOICE_UPDATE_RANK_PLAYER)
+
+def input_id_player_to_update():
+    id_player = input(language.INPUT_ID_PLAYER_TO_UPDATE)
+    return id_player
+
 def input_tournament_choice_time():
     print(language.SELECT_CONTROL_TIME)
     choice_time = int(input("Merci de faire votre choix :"))
@@ -95,6 +102,10 @@ def main_menu_rapport():
     print(language.SUMMARY_MENU_RAPPORT)
 
 
+def main_summary_database():
+    print(language.SUMMARY_SUBMENU_DATABASE)
+
+
 def menu_add_player():
     print(language.INFORM_CREATE_PLAYER)
     player_name = ""
@@ -132,6 +143,9 @@ def listing_players_tournaments(i, players_listing, title):
     for element in players_listing:
         print("\t", element)
 
+
+def last_player_created_into_db(player):
+    print(player)
 
 # ROUNDS
 

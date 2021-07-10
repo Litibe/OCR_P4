@@ -4,7 +4,7 @@ from sqlalchemy.orm import sessionmaker
 from MODELS import models
 
 # engine for sql database with sqlalchemy
-ENGINE = create_engine('sqlite:///../../sql.db', echo=False)
+ENGINE = create_engine('sqlite:///sql.db', echo=False)
 
 
 def init_db():
@@ -143,7 +143,7 @@ def extract_last_tournament():
     return count_of_tournaments, last_tournament
 
 
-def extract_last_players(count_of_tournaments):
+def last_listing_players(count_of_tournaments):
     Session = sessionmaker(bind=ENGINE)
     session = Session()
     last_listing_players = session.query(
@@ -194,6 +194,66 @@ def extract_count_of_match():
     count_of_match = session.query(models.Match.match_id).count()
     return count_of_match
 
+def extract_one_player_by_this_id_into_db(player_id):
+    Session = sessionmaker(bind=ENGINE)
+    session = Session()
+    one_player = session.query(models.Players).get(
+            {"player_id": str(player_id)})
+    return one_player
 
-if __name__ == "__main__":
-    extract_last_match_to_update_rank()
+
+def extract_last_player_into_db():
+    Session = sessionmaker(bind=ENGINE)
+    session = Session()
+    count_of_players = session.query(models.Players.player_id).count()
+    last_player = session.query(models.Players).get(
+            {"player_id": str(count_of_players)})
+    return last_player
+
+
+def extract_listing_players_for_tournament():
+    Session = sessionmaker(bind=ENGINE)
+    session = Session()
+    listing_p_for_t = session.query(models.PlayersForTournament).order_by(
+        models.PlayersForTournament.players_tournament_id)
+    return listing_p_for_t
+
+
+def extract_all_tournament():
+    Session = sessionmaker(bind=ENGINE)
+    session = Session()
+    all_tournaments = session.query(models.Tournament).order_by(
+        models.Tournament.tournament_id)
+    return all_tournaments
+
+
+def extract_all_rounds():
+    Session = sessionmaker(bind=ENGINE)
+    session = Session()
+    all_rounds = session.query(models.Rounds).order_by(
+        models.Rounds.round_id)
+    return all_rounds
+
+
+def extract_players_by_abc():
+    Session = sessionmaker(bind=ENGINE)
+    session = Session()
+    listing = session.query(models.Players).order_by(
+        models.Players.last_name)
+    return listing
+
+
+def extract_players_by_rank():
+    Session = sessionmaker(bind=ENGINE)
+    session = Session()
+    listing = session.query(models.Players).order_by(
+        models.Players.rank)
+    return listing
+
+
+def extract_players_by_id():
+    Session = sessionmaker(bind=ENGINE)
+    session = Session()
+    listing = session.query(models.Players).order_by(
+        models.Players.player_id)
+    return listing

@@ -3,19 +3,46 @@ import subprocess
 from time import sleep
 
 from fpdf import FPDF
-from sqlalchemy.orm import sessionmaker
 
 from API import controller
 from API.app import sql
 from GPU import view
 from LANGUAGES import french as language
-from MODELS import models as models
 
 # create directory to export rapport pdf file
 CURRENT_DIR = os.path.dirname(os.path.dirname(__file__))
 EXPORT_DIR = os.path.join(CURRENT_DIR, "EXPORT_PDF")
 if not os.path.exists(EXPORT_DIR):
     os.makedirs(EXPORT_DIR)
+
+
+def players_by_abc():
+    # players by abc_order
+    listing = sql.extract_players_by_abc()
+    generate_rapport_pdf_players(
+        listing,
+        language.RAPPORT_PLAYERS_LIST_BY_ABC_LAST_NAME
+    )
+    return listing
+
+
+def players_by_rank():
+    # players by rank
+    listing = sql.extract_players_by_rank()
+    listing = listing[::-1]
+    generate_rapport_pdf_players(listing,
+                                 language.RAPPORT_PLAYERS_LIST_BY_RANK
+                                 )
+    return listing
+
+
+def players_by_id():
+    # players by rank
+    listing = sql.extract_players_by_id()
+    generate_rapport_pdf_players(listing,
+                                 language.RAPPORT_PLAYERS_LIST_BY_ID
+                                 )
+    return listing
 
 
 # MAIN RAPPORT
@@ -30,35 +57,31 @@ def main_rapport():
 
         if response_user == 11:
             # players by abc_order
-            listing = generate_rapport_pdf_actor(
-                models.Players, models.Players.last_name,
-                language.RAPPORT_PLAYERS_LIST_BY_ABC_LAST_NAME
-            )
+            listing = players_by_abc()
             view.listing_rapport(
-                language.RAPPORT_PLAYERS_LIST_BY_ABC_LAST_NAME,
-                listing
+                language.RAPPORT_PLAYERS_LIST_BY_ABC_LAST_NAME, listing
             )
 
         elif response_user == 12:
             # players by rank
-            listing = generate_rapport_pdf_actor(
-                models.Players,
-                models.Players.rank,
-                language.RAPPORT_PLAYERS_LIST_BY_ORDER
-            )
+            listing = players_by_rank()
+            view.listing_rapport(language.RAPPORT_PLAYERS_LIST_BY_RANK,
+                                 listing)
+
+
+        elif response_user == 13:
+            # players by id
+            listing = players_by_id()
             view.listing_rapport(
-                language.RAPPORT_PLAYERS_LIST_BY_ORDER, listing
+                language.RAPPORT_PLAYERS_LIST_BY_ABC_LAST_NAME, listing
             )
 
         elif response_user == 21:
             # players by last_name in tournament
-            Session = sessionmaker(bind=sql.ENGINE)
-            session = Session()
-            tournaments = session.query(models.PlayersForTournament).order_by(
-                models.PlayersForTournament.players_tournament_id)
+            listing_p_for_t = sql.extract_listing_players_for_tournament()
             i = 1
-            for tournament in tournaments:
-                players_listing = extract_players_by_abc(tournament)
+            for p_for_t in listing_p_for_t:
+                players_listing = extract_players_by_abc(p_for_t)
                 view.listing_players_tournaments(
                     i, players_listing,
                     language.RAPPORT_TOURNAMENT_LIST_BY_ABC_LAST_NAME
@@ -67,37 +90,29 @@ def main_rapport():
             sleep(1)
 
         elif response_user == 22:
-            Session = sessionmaker(bind=sql.ENGINE)
-            session = Session()
-            tournaments = session.query(models.PlayersForTournament).order_by(
-                models.PlayersForTournament.players_tournament_id)
+            listing_p_for_t = sql.extract_listing_players_for_tournament()
             i = 1
-            for tournament in tournaments:
+            for p_for_t in listing_p_for_t:
                 players_listing, players_listing_id = reorder_players_by_rank(
-                    tournament
+                    p_for_t
                 )
                 view.listing_players_tournaments(
                     i, players_listing,
-                    language.RAPPORT_TOURNAMENT_LIST_BY_ORDER
+                    language.RAPPORT_TOURNAMENT_LIST_BY_RANK
                 )
                 i += 1
             sleep(1)
 
         elif response_user == 3:
             # list tournament by id
-            Session = sessionmaker(bind=sql.ENGINE)
-            session = Session()
-            listing = session.query(models.Tournament).order_by(
-                models.Tournament.tournament_id)
-            view.listing_rapport(language.RAPPORT_TOURNAMENT_LIST_ALL, listing)
+            all_tournaments = sql.extract_all_tournament()
+            view.listing_rapport(language.RAPPORT_TOURNAMENT_LIST_ALL,
+                                 all_tournaments)
             sleep(1)
 
         elif response_user == 4:
-            Session = sessionmaker(bind=sql.ENGINE)
-            session = Session()
-            rounds = session.query(models.Rounds).order_by(
-                models.Rounds.round_id)
-            for info_round in rounds:
+            all_rounds = sql.extract_all_rounds()
+            for info_round in all_rounds:
                 print(info_round)
 
         elif response_user == 5:
@@ -186,12 +201,12 @@ def reorder_players_by_rank(tournament):
     for name, rank in sorted(players_dict.items(), key=lambda x: x[1]):
         players_listing.append(
             name + " " + language.STR_PLAYER_TOURNAMENT_rank + str(rank)
-        + " "+language.STR_PLAYER_TOURNAMENT_rank2)
+            + " " + language.STR_PLAYER_TOURNAMENT_rank2)
     players_listing = players_listing[::-1]
     for player_id, rank in sorted(players_dict_id.items(), key=lambda x: x[1]):
         players_listing_id.append(
             str(player_id) + "#" +
-            language.STR_PLAYER_TOURNAMENT_rank + str(rank) + " "+
+            language.STR_PLAYER_TOURNAMENT_rank + str(rank) + " " +
             language.STR_PLAYER_TOURNAMENT_rank2
         )
     players_listing_id = players_listing_id[::-1]
@@ -199,10 +214,7 @@ def reorder_players_by_rank(tournament):
 
 
 # ____________ FUNCTION GENERATE PDF RAPPORT ____________
-def generate_rapport_pdf_actor(name_class, order, title):
-    Session = sessionmaker(bind=sql.ENGINE)
-    session = Session()
-    listing = session.query(name_class).order_by(order)
+def generate_rapport_pdf_players(listing, title):
     document = FPDF()
     document.add_page()
     document.set_font('helvetica', size=12)
@@ -212,8 +224,7 @@ def generate_rapport_pdf_actor(name_class, order, title):
     for element in listing:
         document.cell(txt=str(element))
         document.ln(5)
-    path = os.path.join(EXPORT_DIR, "listing.pdf")
+    path = os.path.join(EXPORT_DIR, title + ".pdf")
     document.output(path)
     sleep(1)
     subprocess.run(['open', path], check=True)
-    return listing

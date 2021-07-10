@@ -2,15 +2,15 @@
 # MODELS
 STR_PLAYER_1 = "Joueur ID N°"
 STR_PLAYER_2 = " né(e) le "
-STR_PLAYER_3 = "sexe:"
+STR_PLAYER_3 = "sexe: "
 STR_PLAYER_RANK = "("
-STR_PLAYER_RANK2 = "points au classement)"
+STR_PLAYER_RANK2 = "points)"
 
 
 STR_PLAYER_TOURNAMENT_1 = "Voici les ID de joueurs présents " \
                           "lors du Tournoi N°"
 STR_PLAYER_TOURNAMENT_rank = "(avec "
-STR_PLAYER_TOURNAMENT_rank2 = "points)"
+STR_PLAYER_TOURNAMENT_rank2 = " points)"
 
 STR_TOURNAMENT_1 = "Voici les détails du tournoi de l'ID N°"
 STR_TOURNAMENT_2 = "Nom du tournoi :"
@@ -37,16 +37,19 @@ CHOICE_RETURN_MAIN_MENU = "Choix 0 : retour au menu principal"
 # MAIN_MENU
 SUMMARY_MAIN_MENU = """
 ---------------------------------------------------------------
---------------------------------------
-    ♖♖♖ Bienvenue sur le programme de tournoi du Club d'Echec ! ♖♖♖ 
-        Au Sommaire : 
-            Choix 1 : Ajouter un joueur dans la base de données
-            Choix 2 : Accès au Menu TOURNOI ♖
-            Choix 3 : Accès au Menu RAPPORT
+♖♖♖ Bienvenue sur le programme de tournoi du Club d'Echec ! ♖♖♖ 
+    Au Sommaire : 
+            Choix 1 : Accès au Menu BASE DE DONNEES :
+                        - Ajouter un joueur 
+                        - Modifier un joueur
+            Choix 2 : Accès au Menu TOURNOI ♖ :
+                        - Ajouter 8 joueurs au tournoi
+                        - Lancement des Rounds
+            Choix 3 : Accès au Menu RAPPORTS
+                        - Génération de rapports
             
             Choix 0 : Sortie du programme
--------------------------------------------------------------
-----------------------------------------"""
+-------------------------------------------------------------"""
 WHAT_DO_YOU_WANT = "Que souhaitez vous faire : "
 ERROR_INPUT_CHOICE = "\n Merci de saisir un choix valide !"
 ERROR_INPUT_DATE = "\n Merci de saisir une date valide !"
@@ -55,7 +58,6 @@ CONFIRM_INPUT = "Est ce que vous confirmez votre saisie ? (y/n) "
 # MENU_TOURNAMENT
 SUMMARY_MENU_TOURNAMENT = """
 --------------------------------------------------------------------
----------------------------------
     --- Menu TOURNOI --- 
 """
 
@@ -106,13 +108,14 @@ ERROR_MIN_PLAYERS_IN_DATABASE = "ATTENTION, la base de données ne contient " \
 
 # RAPPORT
 SUMMARY_MENU_RAPPORT = """
------------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------
     --- Menu RAPPORT ---
-            Liste de tous les acteurs
+            Liste de tous les Joueurs
                 Choix 11 : par ordre alphabétique
                 Choix 12 : par classement
+                Choix 13 : par ID de joueur
               
-            Liste de tous les joueurs d'un tournoi 
+            Liste de tous les Joueurs d'un tournoi 
                 Choix 21 : par ordre alphabétique
                 Choix 22 : par classement
             
@@ -121,16 +124,16 @@ SUMMARY_MENU_RAPPORT = """
                     
             Choix 0 => Retour au menu principal
 -------------------------------------------------------------------
-----------------------------------"""
+"""
 RAPPORT_PLAYERS_LIST_BY_ABC_LAST_NAME = "--- Listing des Joueurs - " \
                                         "Tri par NOM - ordre Alphabétique  ---"
-RAPPORT_PLAYERS_LIST_BY_ORDER = "--- Listing des Joueurs - " \
+RAPPORT_PLAYERS_LIST_BY_RANK = "--- Listing des Joueurs - " \
                                 "Tri par Classement de joueurs ---"
 RAPPORT_PLAYERS_LIST_BY_ID = "--- Listing des Joueurs par ID ---"
 RAPPORT_TOURNAMENT_LIST_BY_ABC_LAST_NAME = "--- Listing des Joueurs dans " \
                                            "un Tournoi - Tri par NOM - " \
                                            "ordre Alphabétique  ---"
-RAPPORT_TOURNAMENT_LIST_BY_ORDER = "--- Listing des Joueurs dans un Tournoi" \
+RAPPORT_TOURNAMENT_LIST_BY_RANK = "--- Listing des Joueurs dans un Tournoi" \
                                    " - Tri par Classement de joueurs ---"
 RAPPORT_TOURNAMENT_LIST_ALL = "--- Listing des Tournoi - " \
                               "Tri par ID de Tournoi ---"
@@ -141,7 +144,6 @@ RAPPORT_LIST_MATCHS_OF_TOURNAMENT = "--- Listing des Matchs d'un tournoi ---"
 CHOICE_ADD_ROUNDS = "Choix 3 : Ajouter un nouveau tour au tournoi"
 SUMMARY_SUBMENU_ROUNDS = """
 ----------------------------------------------------------------
--------------------------------------
     --- Sous Menu ROUNDS/TOURS --- 
 """
 ROUNDS1_NONE = "Lancement du Round 1"
@@ -155,3 +157,21 @@ INPUT_SCORE_MATCH = "Merci de saisir le résultat du match"
 WITH_PLAYER = " pour "
 CHOICE_SCORE = "\t Le joueur a gagné (Tapez : 1), " \
                "est à égalité (Tapez : 2) ou a perdu (Tapez : 3) ?"
+
+# SUBMENU DATABASE
+SUMMARY_SUBMENU_DATABASE = """
+--------------------------------------------------------------------
+    --- Menu BASE DE DONNEES ---
+            Choix 1 : Ajouter un joueur dans la base de données
+            Choix 2 : Modifier le classement d'un joueur manuellement
+              
+                 
+            Choix 0 : Retour au menu principal
+--------------------------------------------------------------------
+"""
+CHOICE_UPDATE_RANK_PLAYER = "Vous avez choisi de modifier " \
+                            "le classement d'un joueur : \n"\
+                            "Si vous souhaitez avoir la liste des joueurs en" \
+                            " base de données TAPER LE CHOIX : 0 \n "
+INPUT_ID_PLAYER_TO_UPDATE = "Merci de saisir l'ID du joueur à modifier svp : "
+UPDATE_RANK_PLAYER = "Vous avez choisi de modifier "

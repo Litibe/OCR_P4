@@ -41,8 +41,8 @@ def add_players_tournaments(table_players_id):
                     else:
                         player = ""
                         view.error_input_player_for_tournament()
-                        rapport.generate_rapport_pdf_actor(
-                            models.Players, models.Players.player_id,
+                        listing_players = sql.extract_players_by_rank()
+                        rapport.generate_rapport_pdf_players(listing_players,
                             language.RAPPORT_PLAYERS_LIST_BY_ID)
                 except ValueError:
                     view.error_input_player_for_tournament()
@@ -64,7 +64,7 @@ def add_players_tournaments(table_players_id):
     return tournament_id_players
 
 
-def create_player():
+def create_player_into_db():
     name, first_name, birthday, sexe = view.menu_add_player()
     player = models.Players(
         name, first_name, birthday, sexe
@@ -125,7 +125,7 @@ def main_tournament():
                 table_players_id.append(element[0])
             while len(table_players_id) < 8:
                 view.error_min_players_in_database()
-                create_player()
+                create_player_into_db()
                 table_players_id.append("")
             view.choice_add_players_for_tournament()
             view.choice_return_main_menu()
@@ -153,7 +153,7 @@ def main_tournament():
                 input_players_id = add_players_tournaments(
                     table_players_id
                 )
-                last_listing_players = sql.extract_last_players(
+                last_listing_players = sql.last_listing_players(
                     count_of_tournaments
                 )
                 # erase listing if players already linked
@@ -181,6 +181,54 @@ def main_tournament():
             execute = False
 
 
+def update_rank_player(player_id):
+    try :
+        player = sql.extract_last_player_into_db(player_id)
+        print(player)
+    except IndexError :
+        print("joueur pas dans la base")
+
+def input_id_player():
+    id_player = ""
+    while isinstance(id_player, str):
+        try:
+            id_player = int(view.input_id_player_to_update())
+        except ValueError:
+            pass
+    return id_player
+
+def main_database():
+    run = True
+    while run:
+        view.main_summary_database()
+        response_user = control_input_response_user(
+            view.input_what_do_you_want)
+
+        if response_user == 1:
+            create_player_into_db()
+
+        elif response_user == 2:
+            view.choice_update_rank_player()
+            modify = True
+            while modify :
+                id_player = input_id_player()
+                if id_player == 0:
+                    rapport.players_by_abc()
+                    rapport.players_by_rank()
+                else :
+                    modify = False
+            update_rank_player(id_player)
+
+        elif response_user == 3:
+            # view menu_rapport
+            rapport.main_rapport()
+            view.return_main_menu()
+
+        elif response_user == 0:
+            view.return_main_menu()
+            run = False
+
+
 def launch():
     run = True
     while run:
@@ -190,9 +238,10 @@ def launch():
             view.input_what_do_you_want)
 
         if response_user == 1:
+            main_database()
             view.return_main_menu()
 
-        if response_user == 2:
+        elif response_user == 2:
             # view create tournament
             main_tournament()
 
