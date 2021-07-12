@@ -89,6 +89,23 @@ def last_tournament(tournament):
     print(language.LAST_TOURNAMENT)
     print(tournament)
 
+def update_rank_player(player):
+        print(f"{language.YOU_SELECT}:\n{player}")
+        modify_rank = ""
+        while isinstance(modify_rank, str):
+            try :
+                modify_rank = int(input(language.INPUT_NEW_RANK))
+                if modify_rank < 0:
+                    modify_rank = ""
+                    print(language.ERROR_INPUT_CHOICE)
+            except TypeError:
+                print(language.ERROR_INPUT_CHOICE)
+        return modify_rank
+
+
+
+def error_select_player_into_db() :
+        print(language.ERROR_SELECT_PLAYER_INTO_DB)
 
 def choice_return_main_menu():
     print(language.CHOICE_RETURN_MAIN_MENU)
@@ -144,8 +161,8 @@ def listing_players_tournaments(i, players_listing, title):
         print("\t", element)
 
 
-def last_player_created_into_db(player):
-    print(player)
+def watch_player_details(player):
+    print(str(player))
 
 # ROUNDS
 
@@ -179,6 +196,15 @@ def str_round(show_round):
 
 def generate_round1(players_listing):
     print(f""" {language.ROUNDS1_NONE} : 
+    Match1 : {players_listing[0]} VS {players_listing[4]}
+    Match2 : {players_listing[1]} VS {players_listing[5]}
+    Match3 : {players_listing[2]} VS {players_listing[6]}
+    Match4 : {players_listing[3]} VS {players_listing[7]}
+    \t{language.READY_GO}
+        """)
+
+def generate_round2(players_listing):
+    print(f""" {language.ROUNDS2_NONE} : 
     Match1 : {players_listing[0]} VS {players_listing[4]}
     Match2 : {players_listing[1]} VS {players_listing[5]}
     Match3 : {players_listing[2]} VS {players_listing[6]}

@@ -89,12 +89,20 @@ def add_last_match_id_into_actual_round():
     session.commit()
 
 
-def update_rank_player(id_player, points):
+def update_pts_match_player(id_player, pts_player):
     Session = sessionmaker(bind=ENGINE)
     session = Session()
     player = session.query(models.Players).get(
         {"player_id": str(id_player)})
-    player.rank += points
+    player.pts_tournament += pts_player
+    session.commit()
+
+def erase_pts_match_player(id_player):
+    Session = sessionmaker(bind=ENGINE)
+    session = Session()
+    player = session.query(models.Players).get(
+        {"player_id": str(id_player)})
+    player.pts_tournament = 0
     session.commit()
 
 
@@ -178,7 +186,7 @@ def extract_last_round():
     return count_of_rounds, actual_round
 
 
-def extract_last_match_to_update_rank():
+def extract_last_match_to_update_pts():
     Session = sessionmaker(bind=ENGINE)
     session = Session()
     count_of_match = extract_count_of_match()
@@ -193,6 +201,7 @@ def extract_count_of_match():
     session = Session()
     count_of_match = session.query(models.Match.match_id).count()
     return count_of_match
+
 
 def extract_one_player_by_this_id_into_db(player_id):
     Session = sessionmaker(bind=ENGINE)
@@ -257,3 +266,29 @@ def extract_players_by_id():
     listing = session.query(models.Players).order_by(
         models.Players.player_id)
     return listing
+
+if __name__ == "__main__" :
+    ENGINE = create_engine('sqlite:///../../sql.db', echo=False)
+    Session = sessionmaker(bind=ENGINE)
+    session = Session()
+    table_players = session.query(models.Players.rank)
+    listing_players = []
+    for element in table_players :
+        listing_players.append(element)
+    for element in listing_players :
+        if element == listing_players[3] :
+            pass
+
+    view.choice_update_rank_player()
+    modify = True
+    while modify:
+        id_player = input_id_player()
+        if id_player == 0:
+            rapport.players_by_rank()
+        else:
+            modify = False
+    try:
+        player = sql.extract_one_player_by_this_id_into_db(id_player)
+        modify_rank = view.update_rank_player(player)
+    player = extract_one_player_by_this_id_into_db(id_player)
+    modify_rank = view.update_rank_player(player)

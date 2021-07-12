@@ -3,18 +3,20 @@
 STR_PLAYER_1 = "Joueur ID N°"
 STR_PLAYER_2 = " né(e) le "
 STR_PLAYER_3 = "sexe: "
-STR_PLAYER_RANK = "("
-STR_PLAYER_RANK2 = "points)"
+STR_PLAYER_RANK = "N°"
+STR_PLAYER_RANK2 = "au classement"
+STR_PLAYER_PTS_TOURNAMENT = "avec "
+STR_PLAYER_PTS_TOURNAMENT2 = "points au tournoi "
 
 
 STR_PLAYER_TOURNAMENT_1 = "Voici les ID de joueurs présents " \
                           "lors du Tournoi N°"
-STR_PLAYER_TOURNAMENT_rank = "(avec "
-STR_PLAYER_TOURNAMENT_rank2 = " points)"
+STR_PLAYER_TOURNAMENT_rank = "N° "
+STR_PLAYER_TOURNAMENT_rank2 = " au classement"
 
 STR_TOURNAMENT_1 = "Voici les détails du tournoi de l'ID N°"
 STR_TOURNAMENT_2 = "Nom du tournoi :"
-STR_TOURNAMENT_3 = "Date de début de tournoi et son Lieu : le"
+STR_TOURNAMENT_3 = "Date de début de tournoi et son Lieu : le "
 STR_TOURNAMENT_4 = "Tournoi réalisé en "
 STR_TOURNAMENT_5 = "tours"
 STR_TOURNAMENT_6 = "Le contrôle de temps est le"
@@ -40,13 +42,9 @@ SUMMARY_MAIN_MENU = """
 ♖♖♖ Bienvenue sur le programme de tournoi du Club d'Echec ! ♖♖♖ 
     Au Sommaire : 
             Choix 1 : Accès au Menu BASE DE DONNEES :
-                        - Ajouter un joueur 
-                        - Modifier un joueur
-            Choix 2 : Accès au Menu TOURNOI ♖ :
-                        - Ajouter 8 joueurs au tournoi
-                        - Lancement des Rounds
+                        - Gestion des joueurs
+            Choix 2 : Accès au Menu TOURNOI ♖
             Choix 3 : Accès au Menu RAPPORTS
-                        - Génération de rapports
             
             Choix 0 : Sortie du programme
 -------------------------------------------------------------"""
@@ -65,7 +63,7 @@ CREATE_NEW_TOURNAMENT = "Choix 1 : ♖ Créer un nouveau tournoi ♖"
 ADD_PLAYERS_FOR_TOURNAMENT = "Choix 2 : Ajouter les huits joueurs pour " \
                              "le tournoi"
 MODIFY_PLAYERS_FOR_TOURNAMENT = "Choix 2 : Modifier la liste des ID de " \
-                                "joueurs pour le tournoi"
+                                "joueurs avant lancement tournoi"
 
 LAST_TOURNAMENT = "Le tournoi en cours est : "
 LAST_TOURNAMENT_NONE = "Il n'y a aucun tournoi de créer dans la " \
@@ -146,10 +144,10 @@ SUMMARY_SUBMENU_ROUNDS = """
 ----------------------------------------------------------------
     --- Sous Menu ROUNDS/TOURS --- 
 """
-ROUNDS1_NONE = "Lancement du Round 1"
-ROUNDS2_NONE = "Lancement du Round 2"
-ROUNDS3_NONE = "Lancement du Round 3"
-ROUNDS4_NONE = "Lancement du Round 4"
+ROUNDS1_NONE = "Lancement du Round 1 "
+ROUNDS2_NONE = "Lancement du Round 2 "
+ROUNDS3_NONE = "Lancement du Round 3 "
+ROUNDS4_NONE = "Lancement du Round 4 "
 READY_GO = "A vos pions, prêt ? Partez !"
 ADD_ROUND_MENU = "Procédure d'ajout de Round au Tournoi"
 TOURNAMENT_NUMBER = " du Tournoi N° "
@@ -164,7 +162,6 @@ SUMMARY_SUBMENU_DATABASE = """
     --- Menu BASE DE DONNEES ---
             Choix 1 : Ajouter un joueur dans la base de données
             Choix 2 : Modifier le classement d'un joueur manuellement
-              
                  
             Choix 0 : Retour au menu principal
 --------------------------------------------------------------------
@@ -172,6 +169,10 @@ SUMMARY_SUBMENU_DATABASE = """
 CHOICE_UPDATE_RANK_PLAYER = "Vous avez choisi de modifier " \
                             "le classement d'un joueur : \n"\
                             "Si vous souhaitez avoir la liste des joueurs en" \
-                            " base de données TAPER LE CHOIX : 0 \n "
+                            " base de données TAPER LE CHOIX 0 \n "
 INPUT_ID_PLAYER_TO_UPDATE = "Merci de saisir l'ID du joueur à modifier svp : "
 UPDATE_RANK_PLAYER = "Vous avez choisi de modifier "
+ERROR_SELECT_PLAYER_INTO_DB = "ERREUR : Merci de taper un ID de joueur" \
+                              " présent dans la base de données svp."
+YOU_SELECT = "Vous avez sélectionné : "
+INPUT_NEW_RANK = "Merci de saisir le nouveau classement du joueur svp : "

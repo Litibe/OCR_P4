@@ -17,20 +17,28 @@ class Players(Base):
     birthday = Column(Date)
     sex = Column(String)
     rank = Column(Integer)
+    pts_tournament = Column(Integer)
 
-    def __init__(self, last_name, first_name, birthday, sex, rank=0):
+    def __init__(self, last_name, first_name, birthday, sex, rank=0,
+                 pts_tournament=0):
         self.last_name = last_name
         self.first_name = first_name
         self.birthday = birthday
         self.sex = sex
         self.rank = rank
+        self.pts_tournament = pts_tournament
 
     def __str__(self):
         return f"{language.STR_PLAYER_1}{self.player_id} - {self.last_name} " \
                f"{self.first_name} - {self.birthday} - " \
                f"{language.STR_PLAYER_3}" \
-               f"{self.sex} - avec " \
-               f"{self.rank} {language.STR_PLAYER_RANK2[:-1]} "
+               f"{self.sex} - {language.STR_PLAYER_RANK} " \
+               f"{self.rank} {language.STR_PLAYER_RANK2} "
+
+    def watch_pts_tournament(self):
+        return f"{self.last_name} {self.first_name}" \
+               f"{language.STR_PLAYER_PTS_TOURNAMENT} " \
+               f"{self.pts_tournament} {language.STR_PLAYER_PTS_TOURNAMENT2}"
 
 
 class Match(Base):

@@ -10,7 +10,7 @@ from GPU import view
 from LANGUAGES import french as language
 
 # create directory to export rapport pdf file
-CURRENT_DIR = os.path.dirname(os.path.dirname(__file__))
+CURRENT_DIR = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
 EXPORT_DIR = os.path.join(CURRENT_DIR, "EXPORT_PDF")
 if not os.path.exists(EXPORT_DIR):
     os.makedirs(EXPORT_DIR)
@@ -29,7 +29,6 @@ def players_by_abc():
 def players_by_rank():
     # players by rank
     listing = sql.extract_players_by_rank()
-    listing = listing[::-1]
     generate_rapport_pdf_players(listing,
                                  language.RAPPORT_PLAYERS_LIST_BY_RANK
                                  )
@@ -201,13 +200,44 @@ def reorder_players_by_rank(tournament):
     for name, rank in sorted(players_dict.items(), key=lambda x: x[1]):
         players_listing.append(
             name + " " + language.STR_PLAYER_TOURNAMENT_rank + str(rank)
-            + " " + language.STR_PLAYER_TOURNAMENT_rank2)
-    players_listing = players_listing[::-1]
+            + language.STR_PLAYER_TOURNAMENT_rank2)
+
     for player_id, rank in sorted(players_dict_id.items(), key=lambda x: x[1]):
         players_listing_id.append(
             str(player_id) + "#" +
             language.STR_PLAYER_TOURNAMENT_rank + str(rank) + " " +
             language.STR_PLAYER_TOURNAMENT_rank2
+        )
+    players_listing = players_listing[::-1]
+    players_listing_id = players_listing_id[::-1]
+    return players_listing, players_listing_id
+
+
+def reorder_players_by_pts(tournament):
+    players_dict = extract_players_by_rank(
+        tournament.listing_players
+    )
+    players_dict_id = extract_players_by_rank_id(
+        tournament.listing_players
+    )
+    players_listing = []
+    players_listing_id = []
+    for name, pts_tournament, rank in sorted(
+            players_dict.items(), key=lambda x: x[1]
+    ):
+        players_listing.append(
+            name + " " + language.STR_PLAYER_PTS_TOURNAMENT +
+            str(pts_tournament) + language.STR_PLAYER_PTS_TOURNAMENT2
+            + language.STR_PLAYER_RANK + str(rank) + language.STR_PLAYER_RANK2)
+    players_listing = players_listing[::-1]
+    for player_id, pts_tournament in sorted(
+            players_dict_id.items(), key=lambda x: x[1]
+    ):
+        players_listing_id.append(
+            str(player_id) + "#" +
+            language.STR_PLAYER_PTS_TOURNAMENT + str(pts_tournament) + " " +
+            language.STR_PLAYER_PTS_TOURNAMENT2 + "#" +
+            language.STR_PLAYER_RANK + str(rank) + language.STR_PLAYER_RANK2
         )
     players_listing_id = players_listing_id[::-1]
     return players_listing, players_listing_id

@@ -70,6 +70,8 @@ def create_player_into_db():
         name, first_name, birthday, sexe
     )
     sql.add_player_to_database(player)
+    player = sql.extract_last_player_into_db()
+    view.watch_player_details(player)
 
 
 def create_tournament():
@@ -131,7 +133,15 @@ def main_tournament():
             view.choice_return_main_menu()
         elif last_tournament.players is not None:
             view.last_tournament(last_tournament)
-            view.modify_players_for_tournament()
+            if last_tournament.rounds1 is None:
+                view.modify_players_for_tournament()
+                view.rounds1_none()
+            elif last_tournament.rounds2 is None:
+                view.rounds2_none()
+            elif last_tournament.rounds3 is None:
+                view.rounds3_none()
+            elif last_tournament.rounds4 is None:
+                view.rounds4_none()
             view.choice_add_rounds()
             view.choice_return_main_menu()
         response_user = control_input_response_user(
@@ -181,13 +191,6 @@ def main_tournament():
             execute = False
 
 
-def update_rank_player(player_id):
-    try :
-        player = sql.extract_last_player_into_db(player_id)
-        print(player)
-    except IndexError :
-        print("joueur pas dans la base")
-
 def input_id_player():
     id_player = ""
     while isinstance(id_player, str):
@@ -213,11 +216,18 @@ def main_database():
             while modify :
                 id_player = input_id_player()
                 if id_player == 0:
-                    rapport.players_by_abc()
                     rapport.players_by_rank()
                 else :
                     modify = False
-            update_rank_player(id_player)
+            try :
+                player = sql.extract_one_player_by_this_id_into_db(id_player)
+                modify_rank = view.update_rank_player(player)
+
+                sql.update_rank_player(id_player, modify_rank)
+                player = sql.extract_one_player_by_this_id_into_db(id_player)
+                view.watch_player_details(player)
+            except IndexError :
+                view.error_select_player_into_db()
 
         elif response_user == 3:
             # view menu_rapport
