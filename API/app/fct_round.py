@@ -1,8 +1,3 @@
-from API.app import sql, rapport, control_datetime
-from GPU import view
-from LANGUAGES import french as language
-from MODELS import models
-
 
 def submenu_round():
     execute = True
@@ -136,8 +131,3 @@ def generate_other_round():
     players_listing, players_listing_id = rapport.reorder_players_by_pts(
         tournament
     )
-
-
-
-if __name__ == "__main__":
-    pass

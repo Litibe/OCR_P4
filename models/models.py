@@ -1,7 +1,7 @@
 from LANGUAGES import french as language
-from API import constants
+import constants
 
-from sqlalchemy import Column, Integer, String, ForeignKey, Date, sql
+from sqlalchemy import Column, Integer, String, ForeignKey, Date, DateTime, sql
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 
@@ -18,15 +18,14 @@ class Players(Base):
     sex = Column(String)
     rank = Column(Integer)
     pts_tournament = Column(Integer)
+    adversary_tournament = Column(String)
 
-    def __init__(self, last_name, first_name, birthday, sex, rank=0,
-                 pts_tournament=0):
+    def __init__(self, last_name, first_name, birthday, sex, rank):
         self.last_name = last_name
         self.first_name = first_name
         self.birthday = birthday
         self.sex = sex
         self.rank = rank
-        self.pts_tournament = pts_tournament
 
     def __str__(self):
         return f"{language.STR_PLAYER_1}{self.player_id} - {self.last_name} " \

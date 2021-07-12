@@ -1,7 +1,9 @@
-from API import controller
-from API.app import sql
+import controllers.base as controllers
 
+
+def main():
+    menu = controllers.Menu()
+    menu.main()
 
 if __name__ == "__main__":
-    sql.init_db()
-    controller.launch()
+    main()

@@ -1,5 +1,5 @@
 #####################
-# MODELS
+# models
 STR_PLAYER_1 = "Joueur ID N°"
 STR_PLAYER_2 = " né(e) le "
 STR_PLAYER_3 = "sexe: "
@@ -161,16 +161,16 @@ SUMMARY_SUBMENU_DATABASE = """
 --------------------------------------------------------------------
     --- Menu BASE DE DONNEES ---
             Choix 1 : Ajouter un joueur dans la base de données
-            Choix 2 : Modifier le classement d'un joueur manuellement
+            Choix 2 : Monter le classement d'un joueur manuellement
                  
             Choix 0 : Retour au menu principal
 --------------------------------------------------------------------
 """
-CHOICE_UPDATE_RANK_PLAYER = "Vous avez choisi de modifier " \
-                            "le classement d'un joueur : \n"\
+CHOICE_UPDATE_RANK_PLAYER = "Vous avez choisi de MONTER " \
+                            "un joueur au classement : \n"\
                             "Si vous souhaitez avoir la liste des joueurs en" \
                             " base de données TAPER LE CHOIX 0 \n "
-INPUT_ID_PLAYER_TO_UPDATE = "Merci de saisir l'ID du joueur à modifier svp : "
+INPUT_ID_PLAYER = "Merci de saisir l'ID du joueur svp : "
 UPDATE_RANK_PLAYER = "Vous avez choisi de modifier "
 ERROR_SELECT_PLAYER_INTO_DB = "ERREUR : Merci de taper un ID de joueur" \
                               " présent dans la base de données svp."
