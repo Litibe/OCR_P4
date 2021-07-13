@@ -130,3 +130,4 @@ dmypy.json
 /sql.db
 /EXPORT_PDF/
 /test/
+/base_sql.db

@@ -1,8 +1,10 @@
+from sqlalchemy.orm import sessionmaker
+
 from controllers import base
 from LANGUAGES import french as language
-
 import views.base
 from models import models
+
 
 class ControllersPlayers:
     def __init__(self):
@@ -13,7 +15,7 @@ class ControllersPlayers:
         self.views_players = views.base.Players()
 
     def add_into_db(self):
-        Session = base.sessionmaker(bind=base.ENGINE)
+        Session = sessionmaker(bind=base.ENGINE)
         session = Session()
         count_of_players = session.query(models.Players.player_id).count()
         name, first_name, birthday, sexe = self.views_menu.menu_add_player()
@@ -25,38 +27,42 @@ class ControllersPlayers:
         player = self.extract_one_by_id(count_of_players+1)
         self.views_players.watch_player_details(player)
 
-
-    def erase_pts_match_player(self, id_player):
-        Session = base.sessionmaker(bind=base.ENGINE)
+    @staticmethod
+    def erase_pts_match_player(id_player):
+        Session = sessionmaker(bind=base.ENGINE)
         session = Session()
         player = session.query(models.Players).get(
             {"player_id": str(id_player)})
         player.pts_tournament = 0
         session.commit()
 
-    def extract_one_by_id(self, player_id):
-        Session = base.sessionmaker(bind=base.ENGINE)
+    @staticmethod
+    def extract_one_by_id(player_id):
+        Session = sessionmaker(bind=base.ENGINE)
         session = Session()
         one_player = session.query(models.Players).get(
             {"player_id": str(player_id)})
         return one_player
 
-    def extract_last_player(self):
-        Session = base.sessionmaker(bind=base.ENGINE)
+    @staticmethod
+    def extract_last_player():
+        Session = sessionmaker(bind=base.ENGINE)
         session = Session()
         count_of_players = session.query(models.Players.player_id).count()
         last_player = session.query(models.Players).get(
             {"player_id": str(count_of_players)})
         return last_player
 
-    def extract_players_by(self, order):
-        Session = base.sessionmaker(bind=base.ENGINE)
+    @staticmethod
+    def extract_players_by(order):
+        Session = sessionmaker(bind=base.ENGINE)
         session = Session()
         listing = session.query(models.Players).order_by(order)
         return listing
 
-    def extract_listing_players(self, table_players_id):
-        Session = base.sessionmaker(bind=base.ENGINE)
+    @staticmethod
+    def extract_listing_players(table_players_id):
+        Session = sessionmaker(bind=base.ENGINE)
         session = Session()
         listing_players = []
         for player_id in table_players_id:
@@ -64,8 +70,9 @@ class ControllersPlayers:
                 {"player_id": str(player_id)}))
         return listing_players
 
-    def extract_players_id(self):
-        Session = base.sessionmaker(bind=base.ENGINE)
+    @staticmethod
+    def extract_players_id():
+        Session = sessionmaker(bind=base.ENGINE)
         session = Session()
         table_players = session.query(models.Players.player_id)
         table_players_id = []
@@ -73,7 +80,8 @@ class ControllersPlayers:
             table_players_id.append(element[0])
         return table_players_id
 
-    def extract_players_by_rank_id(self, tournament):
+    @staticmethod
+    def extract_players_by_rank_id(tournament):
         players_dict_id = {
             tournament.id_player1: tournament.player_1.rank,
             tournament.id_player2: tournament.player_2.rank,
@@ -86,7 +94,8 @@ class ControllersPlayers:
         }
         return players_dict_id
 
-    def extract_players_by_abc(self, tournament):
+    @staticmethod
+    def players_by_abc(tournament):
         players_listing = [
             tournament.player_1.last_name + " " +
             tournament.player_1.first_name +
@@ -123,7 +132,8 @@ class ControllersPlayers:
         players_listing.sort()
         return players_listing
 
-    def extract_players_by_rank(self, tournament):
+    @staticmethod
+    def extract_players_by_rank(tournament):
         players_dict = {}
         name = (tournament.player_1.last_name + " " +
                 tournament.player_1.first_name)
@@ -206,8 +216,9 @@ class ControllersPlayers:
         players_listing_id = players_listing_id[::-1]
         return players_listing, players_listing_id
 
-    def update_pts_match_player(self, id_player, pts_player):
-        Session = base.sessionmaker(bind=base.ENGINE)
+    @staticmethod
+    def update_pts_match(id_player, pts_player):
+        Session = sessionmaker(bind=base.ENGINE)
         session = Session()
         player = session.query(models.Players).get(
             {"player_id": str(id_player)})
@@ -217,11 +228,13 @@ class ControllersPlayers:
     def update_rank_player(self, id_player):
         player_to_change_rank = self.extract_one_by_id(
             id_player)
-        init_rank = player_to_change_rank.rank
-        Session = base.sessionmaker(bind=base.ENGINE)
+        Session = sessionmaker(bind=base.ENGINE)
         session = Session()
-        modify_rank = self.views_players.input_new_rank(
-            player_to_change_rank)
+        modify_rank = 0
+        table_players_id = self.extract_players_id()
+        while modify_rank not in table_players_id:
+            modify_rank = self.views_players.input_new_rank(
+                player_to_change_rank)
 
         ranks_players = self.extract_players_by(models.Players.rank)
         for players in ranks_players:
@@ -232,9 +245,6 @@ class ControllersPlayers:
             else:
                 pass
         player_to_change_rank = session.query(models.Players).get(
-                    {"player_id": str(players.player_id)})
+                    {"player_id": str(id_player)})
         player_to_change_rank.rank = modify_rank
         session.commit()
-
-
-

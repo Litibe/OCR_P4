@@ -5,24 +5,30 @@ from LANGUAGES import french as language
 
 
 class Error:
-    def input_choice(self):
+    @staticmethod
+    def input_choice():
         print(language.ERROR_INPUT_CHOICE)
 
-    def input_player_for_tournament(self):
+    @staticmethod
+    def input_player_for_tournament():
         print(language.ERROR_INPUT_PLAYER)
 
-    def player_already_in_tournament(self):
+    @staticmethod
+    def player_already_in_tournament():
         print(language.ERROR_PLAYER_ALREADY_IN_TOURNAMENT)
 
-    def min_players_into_db(self):
+    @staticmethod
+    def min_players_into_db():
         print(language.ERROR_MIN_PLAYERS_IN_DATABASE)
 
-    def select_player_into_db(self):
+    @staticmethod
+    def select_player_into_db():
         print(language.ERROR_SELECT_PLAYER_INTO_DB)
 
 
 class Input:
-    def score_match(self, match_number, name_player):
+    @staticmethod
+    def score_match(match_number, name_player):
         print(f"{language.INPUT_SCORE_MATCH} "
               f"{str(match_number)}"
               f"{language.WITH_PLAYER}"
@@ -40,14 +46,15 @@ class Input:
             result = 0
         return result
 
-
-    def what_do_you_want(self):
+    @staticmethod
+    def what_do_you_want():
         action = (input(language.WHAT_DO_YOU_WANT))
         return action
 
 
 class Match:
-    def generate_round1(self, players_listing):
+    @staticmethod
+    def generate_round1(players_listing):
         print(f""" {language.ROUNDS1_NONE} : 
         Match1 : {players_listing[0]} VS {players_listing[4]}
         Match2 : {players_listing[1]} VS {players_listing[5]}
@@ -56,7 +63,8 @@ class Match:
         \t{language.READY_GO}
             """)
 
-    def generate_round2(self, players_listing):
+    @staticmethod
+    def generate_round2(players_listing):
         print(f""" {language.ROUNDS2_NONE} : 
         Match1 : {players_listing[0]} VS {players_listing[4]}
         Match2 : {players_listing[1]} VS {players_listing[5]}
@@ -67,28 +75,36 @@ class Match:
 
 
 class Menu:
-    def main_menu(self):
+    @staticmethod
+    def main_menu():
         print(language.SUMMARY_MAIN_MENU)
 
-    def main_menu_tournament(self):
+    @staticmethod
+    def main_menu_tournament():
         print(language.SUMMARY_MENU_TOURNAMENT)
 
-    def choice_add_players_for_tournament(self):
+    @staticmethod
+    def choice_add_players_for_tournament():
         print(language.ADD_PLAYERS_FOR_TOURNAMENT)
 
-    def choice_return_main_menu(self):
+    @staticmethod
+    def choice_return_main_menu():
         print(language.CHOICE_RETURN_MAIN_MENU)
 
-    def return_main_menu(self):
+    @staticmethod
+    def return_main_menu():
         print(language.RETURN_MAIN_MENU)
 
-    def main_menu_rapport(self):
+    @staticmethod
+    def main_menu_rapport():
         print(language.SUMMARY_MENU_RAPPORT)
 
-    def main_database(self):
+    @staticmethod
+    def main_database():
         print(language.SUMMARY_SUBMENU_DATABASE)
 
-    def menu_add_player(self):
+    @staticmethod
+    def menu_add_player():
         print(language.INFORM_CREATE_PLAYER)
         player_name = ""
         while len(player_name) < 1:
@@ -110,13 +126,23 @@ class Menu:
             player_sexe = str(input(language.SEX_PLAYER)).capitalize()
         return player_name, player_first_name, player_birthday, player_sexe
 
+    @staticmethod
+    def choice_add_rounds():
+        print(language.CHOICE_ADD_ROUNDS)
+
+    @staticmethod
+    def summary_submenu_rounds():
+        print(language.SUMMARY_SUBMENU_ROUNDS)
+
 
 class Players:
 
-    def choice_update_rank_player(self):
+    @staticmethod
+    def choice_update_rank_player():
         print(language.CHOICE_UPDATE_RANK_PLAYER)
 
-    def input_id_player(self):
+    @staticmethod
+    def input_id_player():
         id_player = ""
         while isinstance(id_player, str):
             try:
@@ -128,8 +154,8 @@ class Players:
             return id_player
         return id_player
 
-
-    def input_new_rank(self, player):
+    @staticmethod
+    def input_new_rank(player):
         print(f"{language.YOU_SELECT}:\n{player}")
         modify_rank = ""
         while isinstance(modify_rank, str):
@@ -142,12 +168,14 @@ class Players:
                 print(language.ERROR_INPUT_CHOICE)
         return modify_rank
 
-    def watch_player_details(self, player):
+    @staticmethod
+    def watch_player_details(player):
         print(str(player))
 
 
 class Rapports:
-    def listing_rapport(self, language_rapport, listing):
+    @staticmethod
+    def listing_rapport(language_rapport, listing):
         print(language_rapport)
         for element in listing:
             print(element)
@@ -155,7 +183,8 @@ class Rapports:
             "-------------------------------------------------------------")
         sleep(2)
 
-    def listing_players_tournaments(self, i, players_listing, title):
+    @staticmethod
+    def listing_players_tournaments(i, players_listing, title):
         print(title)
         print(language.STR_PLAYER_TOURNAMENT_1, i)
         for element in players_listing:
@@ -164,63 +193,78 @@ class Rapports:
 
 class Rounds:
 
-    def choice_add_rounds(self):
-        print(language.CHOICE_ADD_ROUNDS)
-
-    def summary_submenu_rounds(self):
-        print(language.SUMMARY_SUBMENU_ROUNDS)
-
-    def rounds1_none(self):
+    @staticmethod
+    def rounds1_none():
         print(language.ROUNDS1_NONE)
 
-    def rounds2_none(self):
+    @staticmethod
+    def rounds2_none():
         print(language.ROUNDS2_NONE)
 
-    def rounds3_none(self):
+    @staticmethod
+    def rounds3_none():
         print(language.ROUNDS3_NONE)
 
-    def rounds4_none(self):
+    @staticmethod
+    def rounds4_none():
         print(language.ROUNDS4_NONE)
 
-    def str_round(self, show_round):
+    @staticmethod
+    def str_round(show_round):
         print(show_round)
 
 
 class Tournament:
 
-    def create_new_tournament(self):
+    @staticmethod
+    def create_new_tournament():
         print(language.LAST_TOURNAMENT_NONE)
         print(language.CREATE_NEW_TOURNAMENT)
 
-    def input_name_location(self):
+    @staticmethod
+    def input_name_location():
         print(language.CREATE_NEW_TOURNAMENT)
         name = str(input(language.INPUT_TOURNAMENT_NAME))
         location = str(input(language.INPUT_TOURNAMENT_LOCATION))
         return name, location
 
-    def input_confirm_listing_players(self, listing_players):
+    @staticmethod
+    def watch_choice_time_to_choice(i, element):
+        print(f" \t Choix {i} pour {element}")
+
+    @staticmethod
+    def input_confirm_listing_players(listing_players):
         print(language.LISTING_PLAYERS_TO_CONFIRM)
         for element in listing_players:
             print(element)
         input_confirm = input(language.CONFIRM_INPUT)
         return input_confirm
 
-    def input_player(self, i):
+    @staticmethod
+    def input_player(i):
         player = input(f"ID player{i} : ")
         return player
 
-    def input_tournament_choice_time(self):
+    @staticmethod
+    def input_tournament_choice_time():
         print(language.SELECT_CONTROL_TIME)
         choice_time = int(input("Merci de faire votre choix :"))
         return choice_time
 
-    def input_tournament_description(self):
+    @staticmethod
+    def input_tournament_description():
         description = str(input(language.INPUT_DESCRIPTION_TOURNAMENT))
         return description
 
-    def modify_players_for_tournament(self):
+    @staticmethod
+    def inform_input_players():
+        print(language.INFORM_INPUT_PLAYERS)
+
+    @staticmethod
+    def modify_players_for_tournament():
         print(language.MODIFY_PLAYERS_FOR_TOURNAMENT)
 
+    @staticmethod
     def last_tournament(tournament):
         print(language.LAST_TOURNAMENT)
         print(tournament)
