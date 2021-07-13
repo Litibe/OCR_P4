@@ -63,7 +63,7 @@ CREATE_NEW_TOURNAMENT = "Choix 1 : ♖ Créer un nouveau tournoi ♖"
 ADD_PLAYERS_FOR_TOURNAMENT = "Choix 2 : Ajouter les huits joueurs pour " \
                              "le tournoi"
 MODIFY_PLAYERS_FOR_TOURNAMENT = "Choix 2 : Modifier la liste des ID de " \
-                                "joueurs avant lancement tournoi"
+                                "joueurs avant lancement du 1er Round"
 
 LAST_TOURNAMENT = "Le tournoi en cours est : "
 LAST_TOURNAMENT_NONE = "Il n'y a aucun tournoi de créer dans la " \
@@ -80,6 +80,7 @@ LISTING_PLAYERS_TO_CONFIRM = "Voici la liste des joueurs que vous avez " \
                              "sélectionné :"
 CHOICE_TIME = ["Bullet", "Blitz", "Coup rapide"]
 SELECT_CONTROL_TIME = "Voici la liste des contrôleur du temps disponibles : "
+YOUR_CHOICE = "Merci de faire votre choix : "
 INPUT_DESCRIPTION_TOURNAMENT = "Vous pouvez saisir une description de " \
                                "tournoi : "
 INFORM_CREATE_TOURNAMENT_INTO_DB = "--- Création du Tournoi dans la base" \
@@ -89,6 +90,7 @@ INFORM_CREATE_PLAYERS_TOURNAMENT_INTO_DB = "--- Création de la liste des " \
                                            " dans la base de données ---"
 ERROR_PLAYER_ALREADY_IN_TOURNAMENT = "Attention cet ID de joueur a déjà été " \
                                      "saisie dans la liste liée au tournoi"
+TOURNAMENT_NOT_END = "Tournoi toujours en cours !"
 # MENU_ADD_PLAYER
 INFORM_CREATE_PLAYER = "Vous avez sélectionné la création d'un nouveau " \
                        "Joueur dans la BDD, " \

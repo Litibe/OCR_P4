@@ -14,7 +14,7 @@ from models import models
 import views.base
 
 # create directory to export rapport pdf file
-CURRENT_DIR = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
+CURRENT_DIR = os.path.dirname(os.path.dirname(__file__))
 EXPORT_DIR = os.path.join(CURRENT_DIR, "EXPORT_PDF")
 if not os.path.exists(EXPORT_DIR):
     os.makedirs(EXPORT_DIR)
@@ -31,8 +31,8 @@ def init_db():
 
 
 def create_datetime_now():
-    date_now = datetime.datetime.now(constants.TIME_ZONE)
-    date = date_now.strftime('%d/%m/%Y %H:%M:%S')
+    date = datetime.datetime.now(constants.TIME_ZONE)
+    # date = date_now.strftime('%d/%m/%Y %H:%M:%S')
     # date = date_now.strftime('%d/%m/%Y')
     # date = datetime.datetime.strptime(date, '%d/%m/%Y')
     # hours = date_now.strftime("%H:%M")
@@ -68,6 +68,8 @@ class Menu:
                         self.views_input.what_do_you_want())
                 except TypeError:
                     self.views_error.input_choice()
+                except ValueError:
+                    self.views_error.input_choice()
 
             if response_user == 1:
                 self.main_database()
@@ -97,6 +99,8 @@ class Menu:
                     response_user = int(
                         self.views_input.what_do_you_want())
                 except TypeError:
+                    self.views_error.input_choice()
+                except ValueError:
                     self.views_error.input_choice()
 
             if response_user == 1:
@@ -171,13 +175,15 @@ class Menu:
                 self.views_menu.choice_add_rounds()
                 self.views_menu.choice_return_main_menu()
 
-            choice = [0, 1, 2]
+            choice = [0, 1, 2, 3]
             response_user = ""
             while response_user not in choice:
                 try:
                     response_user = int(
                         self.views_input.what_do_you_want())
                 except TypeError:
+                    self.views_error.input_choice()
+                except ValueError:
                     self.views_error.input_choice()
 
             # menu create tournament
@@ -242,12 +248,14 @@ class Menu:
                 execute = False
             elif last_tournament.rounds2 is None:
                 self.views_rounds.rounds2_none()
+                """
                 self.control_tournament.add_round(
                     round_number=2,
                     count_of_tournaments=count)
                 self.control_tournament.add_link_between_round_tournament(
                     last_tournament
                 )
+                """
                 self.control_tournament.generate_second_round()
                 self.views_menu.return_main_menu()
                 execute = False

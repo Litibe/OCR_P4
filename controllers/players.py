@@ -28,15 +28,6 @@ class ControllersPlayers:
         self.views_players.watch_player_details(player)
 
     @staticmethod
-    def erase_pts_match_player(id_player):
-        Session = sessionmaker(bind=base.ENGINE)
-        session = Session()
-        player = session.query(models.Players).get(
-            {"player_id": str(id_player)})
-        player.pts_tournament = 0
-        session.commit()
-
-    @staticmethod
     def extract_one_by_id(player_id):
         Session = sessionmaker(bind=base.ENGINE)
         session = Session()
@@ -178,12 +169,8 @@ class ControllersPlayers:
         for player_id, rank in sorted(players_dict_id.items(),
                                       key=lambda x: x[1]):
             players_listing_id.append(
-                str(player_id) + "#" +
-                language.STR_PLAYER_TOURNAMENT_rank + str(rank) + " " +
-                language.STR_PLAYER_TOURNAMENT_rank2
+                str(player_id)
             )
-        players_listing = players_listing[::-1]
-        players_listing_id = players_listing_id[::-1]
         return players_listing, players_listing_id
 
     def reorder_players_by_pts(self, tournament):
@@ -222,7 +209,16 @@ class ControllersPlayers:
         session = Session()
         player = session.query(models.Players).get(
             {"player_id": str(id_player)})
-        player.pts_tournament += pts_player
+        player.pts_tournament += int(pts_player)
+        session.commit()
+
+    @staticmethod
+    def update_adversary_match(id_player, id_adversary):
+        Session = sessionmaker(bind=base.ENGINE)
+        session = Session()
+        player = session.query(models.Players).get(
+            {"player_id": str(id_player)})
+        player.pts_tournament += (str(id_adversary) + " , ")
         session.commit()
 
     def update_rank_player(self, id_player):
@@ -247,4 +243,14 @@ class ControllersPlayers:
         player_to_change_rank = session.query(models.Players).get(
                     {"player_id": str(id_player)})
         player_to_change_rank.rank = modify_rank
+        session.commit()
+
+    @staticmethod
+    def erase_pts_match_player(id_player):
+        Session = sessionmaker(bind=base.ENGINE)
+        session = Session()
+        player = session.query(models.Players).get(
+            {"player_id": str(id_player)})
+        player.pts_tournament = 0
+        player.adversary_tournament = ""
         session.commit()

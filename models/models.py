@@ -1,7 +1,7 @@
 from LANGUAGES import french as language
 import constants
 
-from sqlalchemy import Column, Integer, String, ForeignKey, Date, DateTime, sql
+from sqlalchemy import Column, Integer, String, ForeignKey, Date, DateTime
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 
@@ -93,16 +93,17 @@ class Rounds(Base):
     def __init__(self, name_round, date):
         self.name_round = name_round
         self.date_started = date
-        self.date_finished = sql.null()
 
     def __str__(self):
         return f"""{language.STR_ROUNDS_1} {self.round_id} 
-    {language.STR_ROUND_STARTED} {self.date_started} 
+    {language.STR_ROUND_STARTED} 
+    {self.date_started.strftime('%d/%m/%Y %H:%M:%S')} 
         Match1 id N°{self.match1_id} : {self.match1_details}
         Match2 id N°{self.match2_id} : {self.match2_details}
         Match3 id N°{self.match3_id} : {self.match3_details}
         Match4 id N°{self.match4_id} : {self.match4_details}
-    {language.STR_ROUND_STARTED} {self.date_finished}  
+    {language.STR_ROUND_FINISHED} 
+    {self.date_finished.strftime('%d/%m/%Y %H:%M:%S')}  
         """
 
 
@@ -218,20 +219,24 @@ class Tournament(Base):
         self.number_of_rounds = number_of_rounds
         self.time_controller = time_controller
         self.description = description
-        self.date_finished = sql.null()
 
     def __str__(self):
         if self.listing_players is None:
             self.listing_players_tournament = ""
         else:
             self.listing_players_tournament = self.listing_players
+        if self.date_finished is None:
+            self.finished = language.TOURNAMENT_NOT_END
+        else:
+            self.finished = self.date_finished
         return f"{language.STR_TOURNAMENT_1} {self.tournament_id} : " \
                f"\n\t{language.STR_TOURNAMENT_2} {self.name}" \
                f"\n\t{language.STR_TOURNAMENT_3}" \
-               f"{self.date_started} - {self.location}" \
+               f"{self.date_started.strftime('%d/%m/%Y %H:%M:%S')} " \
+               f"- {self.location}" \
                f"\n\t{language.STR_TOURNAMENT_4}" \
                f"{constants.NUMBER_OF_ROUNDS} {language.STR_TOURNAMENT_5}" \
                f"\n\t{language.STR_TOURNAMENT_6} {self.time_controller} " \
                f"\n\t{language.STR_TOURNAMENT_7} {self.description} " \
-               f"{self.listing_players_tournament}" \
-               f"\n"
+               f"{self.listing_players_tournament} \n" \
+               f"{self.finished}\n"

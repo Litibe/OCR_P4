@@ -195,11 +195,20 @@ class ControllersTournament:
             {"round_id": str(count_of_rounds)})
         return count_of_rounds, actual_round
 
-    def update_time_finished_round(self, date):
+    @staticmethod
+    def update_time_finished_round_with_link_tournament():
         Session = sessionmaker(bind=base.ENGINE)
         session = Session()
-        last_round = self.extract_last_round()
-        last_round.date_finished = date
+        count_of_rounds = session.query(models.Rounds.round_id).count()
+        actual_round = session.query(models.Rounds).get(
+            {"round_id": str(count_of_rounds)})
+        date = base.create_datetime_now()
+        actual_round.date_finished = date
+        count_of_tournament = session.query(
+            models.Tournament.tournament_id).count()
+        actual_tournament = session.query(models.Tournament).get(
+            {"tournament_id": str(count_of_tournament)})
+        actual_tournament.rounds1 = int(count_of_rounds)
         session.commit()
 
     @staticmethod
@@ -263,8 +272,13 @@ class ControllersTournament:
         name_player2 = players_listing[int(player2) - 1].split("(")[0]
         result_player1 = self.views_input.score_match(
             match_number, name_player1)
-        result_player2 = self.views_input.score_match(
-            match_number, name_player2)
+        result_player2 = ""
+        if result_player1 == 0:
+            result_player2 = 1
+        elif result_player1 == 0.5:
+            result_player2 = 0.5
+        elif result_player1 == 1:
+            result_player2 = 0
         new_match = models.Match(id_player1, result_player1,
                                  id_player2, result_player2)
         return new_match
@@ -282,16 +296,14 @@ class ControllersTournament:
         self.control_player.update_pts_match(
             last_match.id_player2, last_match.result_player_2)
 
-    def erase_pts_tournament_players(self, players_listing_id):
-        for id_player in players_listing_id:
-            self.control_player.erase_pts_match_player(id_player)
-
     def generate_first_round(self):
         # extract list of players tournament by rank
         count, tournament = self.extract_last()
         players_listing, p_l_id = self.control_player.reorder_players_by_rank(
             tournament
         )
+        for id_player in p_l_id:
+            self.control_player.erase_pts_match_player(id_player)
         # view battle with players
         self.views_match.generate_round1(players_listing)
 
@@ -314,11 +326,10 @@ class ControllersTournament:
             tournament, player1=4, player2=8, match_number=4)
         self.add_match_with_update_player_pts_into_db(new_match)
         # date finished round
-        date = base.create_datetime_now()
-        self.update_time_finished_round(date)
+        self.update_time_finished_round_with_link_tournament()
 
     def generate_second_round(self):
-        # extract list of players tournament by rank
+        # extract list of players tournament by point
         count_of_tournaments, tournament = self.extract_last()
         players_listing, p_l_id = self.control_player.reorder_players_by_pts(
             tournament
