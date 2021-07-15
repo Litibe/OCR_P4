@@ -173,43 +173,13 @@ class ControllersPlayers:
             )
         return players_listing, players_listing_id
 
-    def reorder_players_by_pts(self, tournament):
-        players_dict = self.extract_players_by_rank(
-            tournament.listing_players
-        )
-        players_dict_id = self.extract_players_by_rank_id(
-            tournament.listing_players
-        )
-        players_listing = []
-        players_listing_id = []
-        for name, pts_tournament, rank in sorted(
-                players_dict.items(), key=lambda x: x[1]
-        ):
-            players_listing.append(
-                name + " " + language.STR_PLAYER_PTS_TOURNAMENT +
-                str(pts_tournament) + language.STR_PLAYER_PTS_TOURNAMENT2
-                + language.STR_PLAYER_RANK + str(
-                    rank) + language.STR_PLAYER_RANK2)
-        players_listing = players_listing[::-1]
-        for player_id, pts_tournament in sorted(
-                players_dict_id.items(), key=lambda x: x[1]
-        ):
-            players_listing_id.append(
-                str(player_id) + "#" +
-                language.STR_PLAYER_PTS_TOURNAMENT + str(
-                    pts_tournament) + " " +
-                language.STR_PLAYER_PTS_TOURNAMENT2 + "#"
-            )
-        players_listing_id = players_listing_id[::-1]
-        return players_listing, players_listing_id
-
     @staticmethod
     def update_pts_match(id_player, pts_player):
         Session = sessionmaker(bind=base.ENGINE)
         session = Session()
         player = session.query(models.Players).get(
             {"player_id": str(id_player)})
-        player.pts_tournament += int(pts_player)
+        player.pts_tournament += float(pts_player)
         session.commit()
 
     @staticmethod
@@ -218,7 +188,7 @@ class ControllersPlayers:
         session = Session()
         player = session.query(models.Players).get(
             {"player_id": str(id_player)})
-        player.pts_tournament += (str(id_adversary) + " , ")
+        player.adversary_tournament += (str(id_adversary) + " , ")
         session.commit()
 
     def update_rank_player(self, id_player):

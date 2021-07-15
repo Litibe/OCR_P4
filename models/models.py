@@ -1,7 +1,8 @@
 from LANGUAGES import french as language
 import constants
 
-from sqlalchemy import Column, Integer, String, ForeignKey, Date, DateTime
+from sqlalchemy import Column, Integer, Float, \
+    String, ForeignKey, Date, DateTime
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 
@@ -17,7 +18,7 @@ class Players(Base):
     birthday = Column(Date)
     sex = Column(String)
     rank = Column(Integer)
-    pts_tournament = Column(Integer)
+    pts_tournament = Column(Float)
     adversary_tournament = Column(String)
 
     def __init__(self, last_name, first_name, birthday, sex, rank):
@@ -28,16 +29,23 @@ class Players(Base):
         self.rank = rank
 
     def __str__(self):
+        if self.pts_tournament is None :
+            self.pts = ""
+        else :
+            self.pts = f"{self.pts_tournament} + \
+                       {language.STR_PLAYER_PTS_TOURNAMENT2}"
         return f"{language.STR_PLAYER_1}{self.player_id} - {self.last_name} " \
-               f"{self.first_name} - {self.birthday} - " \
+               f"{self.first_name} - " \
+               f"{self.birthday.strftime('%d/%m/%Y')} - " \
                f"{language.STR_PLAYER_3}" \
                f"{self.sex} - {language.STR_PLAYER_RANK} " \
-               f"{self.rank} {language.STR_PLAYER_RANK2} "
+               f"{self.rank} {language.STR_PLAYER_RANK2} - " \
+               f"{self.pts_tournament} {language.STR_PLAYER_PTS_TOURNAMENT2}"
 
     def watch_pts_tournament(self):
-        return f"{self.last_name} {self.first_name}" \
+        return f"{self.last_name} {self.first_name} " \
                f"{language.STR_PLAYER_PTS_TOURNAMENT} " \
-               f"{self.pts_tournament} {language.STR_PLAYER_PTS_TOURNAMENT2}"
+               f"{self.pts}"
 
 
 class Match(Base):
@@ -45,10 +53,10 @@ class Match(Base):
     match_id = Column(Integer, primary_key=True, autoincrement=True)
     id_player1 = Column(Integer, ForeignKey("T_Players.player_id"))
     player_1 = relationship('Players', foreign_keys="Match.id_player1")
-    result_player_1 = Column(Integer)
+    result_player_1 = Column(Float)
     id_player2 = Column(Integer, ForeignKey("T_Players.player_id"))
     player_2 = relationship('Players', foreign_keys="Match.id_player2")
-    result_player_2 = Column(Integer)
+    result_player_2 = Column(Float)
 
     def __init__(self,
                  id_player1, result_player_1,
@@ -149,36 +157,36 @@ class PlayersForTournament(Base):
     def __str__(self):
         return f"\n{language.STR_PLAYER_TOURNAMENT_1}" \
                f"{self.players_tournament_id} : " \
-               f"\n\tID N°{self.id_player1} - " \
-               f"{self.player_1.last_name} {self.player_1.first_name} " \
+               f"\n\tID N°{self.id_player1} --- " \
+               f"{self.player_1.last_name} {self.player_1.first_name} --- " \
                f"{language.STR_PLAYER_TOURNAMENT_rank}{self.player_1.rank}" \
                f"{language.STR_PLAYER_TOURNAMENT_rank2}" \
-               f"\n\tID N°{self.id_player2} - " \
-               f"{self.player_2.last_name} {self.player_2.first_name} " \
+               f"\n\tID N°{self.id_player2} --- " \
+               f"{self.player_2.last_name} {self.player_2.first_name} --- " \
                f"{language.STR_PLAYER_TOURNAMENT_rank}{self.player_2.rank}" \
                f"{language.STR_PLAYER_TOURNAMENT_rank2}" \
-               f"\n\tID N°{self.id_player3} - " \
-               f"{self.player_3.last_name} {self.player_3.first_name} " \
+               f"\n\tID N°{self.id_player3} --- " \
+               f"{self.player_3.last_name} {self.player_3.first_name} --- " \
                f"{language.STR_PLAYER_TOURNAMENT_rank}{self.player_3.rank}" \
                f"{language.STR_PLAYER_TOURNAMENT_rank2}" \
-               f"\n\tID N°{self.id_player4} - " \
-               f"{self.player_4.last_name} {self.player_4.first_name} " \
+               f"\n\tID N°{self.id_player4} --- " \
+               f"{self.player_4.last_name} {self.player_4.first_name} --- " \
                f"{language.STR_PLAYER_TOURNAMENT_rank}{self.player_4.rank}" \
                f"{language.STR_PLAYER_TOURNAMENT_rank2}" \
-               f"\n\tID N°{self.id_player5} - " \
-               f"{self.player_5.last_name} {self.player_5.first_name} " \
+               f"\n\tID N°{self.id_player5} --- " \
+               f"{self.player_5.last_name} {self.player_5.first_name} --- " \
                f"{language.STR_PLAYER_TOURNAMENT_rank}{self.player_5.rank}" \
                f"{language.STR_PLAYER_TOURNAMENT_rank2} " \
-               f"\n\tID N°{self.id_player6} - " \
-               f"{self.player_6.last_name} {self.player_6.first_name} " \
+               f"\n\tID N°{self.id_player6} --- " \
+               f"{self.player_6.last_name} {self.player_6.first_name} --- " \
                f"{language.STR_PLAYER_TOURNAMENT_rank}{self.player_6.rank}" \
                f"{language.STR_PLAYER_TOURNAMENT_rank2}" \
-               f"\n\tID N°{self.id_player7} - " \
-               f"{self.player_7.last_name} {self.player_7.first_name} " \
+               f"\n\tID N°{self.id_player7} --- " \
+               f"{self.player_7.last_name} {self.player_7.first_name} --- " \
                f"{language.STR_PLAYER_TOURNAMENT_rank}{self.player_7.rank}" \
                f"{language.STR_PLAYER_TOURNAMENT_rank2}" \
-               f"\n\tID N°{self.id_player8} - " \
-               f"{self.player_8.last_name} {self.player_8.first_name} " \
+               f"\n\tID N°{self.id_player8} --- " \
+               f"{self.player_8.last_name} {self.player_8.first_name} --- " \
                f"{language.STR_PLAYER_TOURNAMENT_rank}{self.player_8.rank}" \
                f"{language.STR_PLAYER_TOURNAMENT_rank2}"
 
@@ -228,7 +236,7 @@ class Tournament(Base):
         if self.date_finished is None:
             self.finished = language.TOURNAMENT_NOT_END
         else:
-            self.finished = self.date_finished
+            self.finished = self.date_finished.strftime('%d/%m/%Y %H:%M:%S')
         return f"{language.STR_TOURNAMENT_1} {self.tournament_id} : " \
                f"\n\t{language.STR_TOURNAMENT_2} {self.name}" \
                f"\n\t{language.STR_TOURNAMENT_3}" \

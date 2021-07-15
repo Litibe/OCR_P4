@@ -64,12 +64,16 @@ class Match:
             """)
 
     @staticmethod
-    def generate_round2(players_listing):
+    def generate_other_round(players_listing):
         print(f""" {language.ROUNDS2_NONE} : 
-        Match1 : {players_listing[0]} VS {players_listing[1]}
-        Match2 : {players_listing[2]} VS {players_listing[3]}
-        Match3 : {players_listing[4]} VS {players_listing[5]}
-        Match4 : {players_listing[6]} VS {players_listing[7]}
+        Match1 : {players_listing[0]} 
+                VS {players_listing[1]}
+        Match2 : {players_listing[2]} 
+                VS {players_listing[3]}
+        Match3 : {players_listing[4]} 
+                VS {players_listing[5]}
+        Match4 : {players_listing[6]} 
+                VS {players_listing[7]}
         \t{language.READY_GO}
             """)
 

@@ -76,7 +76,7 @@ class ControllersTournament:
                             player = ""
                             self.views_error.input_player_for_tournament()
                             listing = self.control_player.extract_players_by(
-                                models.Players.rank)
+                                models.Players.player_id)
                             self.generate.rapport_pdf_for_players(
                                 listing,
                                 language.RAPPORT_PLAYERS_LIST_BY_ID)
@@ -262,16 +262,10 @@ class ControllersTournament:
         session.add(new_round)
         session.commit()
 
-    def input_result_match(self, tournament, player1, player2, match_number):
-        players_listing, \
-            players_listing_id = self.control_player.reorder_players_by_rank(
-                tournament)
-        id_player1 = int(players_listing_id[int(player1) - 1].split("#")[0])
-        name_player1 = players_listing[int(player1) - 1].split("(")[0]
-        id_player2 = int(players_listing_id[int(player2) - 1].split("#")[0])
-        name_player2 = players_listing[int(player2) - 1].split("(")[0]
+    def input_result_match(self, id_player1, id_player2, match_number):
+        player_1 = self.control_player.extract_one_by_id(id_player1)
         result_player1 = self.views_input.score_match(
-            match_number, name_player1)
+            match_number, player_1)
         result_player2 = ""
         if result_player1 == 0:
             result_player2 = 1
@@ -309,33 +303,169 @@ class ControllersTournament:
 
         # joueur 1 vs 5
         new_match = self.input_result_match(
-            tournament, player1=1, player2=5, match_number=1)
+            id_player1=1, id_player2=5, match_number=1)
+        self.control_player.update_adversary_match(1, 5)
         self.add_match_with_update_player_pts_into_db(new_match)
 
         # joueur 2 vs 6
         new_match = self.input_result_match(
-            tournament, player1=2, player2=6, match_number=2)
+            id_player1=2, id_player2=6, match_number=2)
+        self.control_player.update_adversary_match(2, 6)
         self.add_match_with_update_player_pts_into_db(new_match)
 
         # joueur 3 vs 7
         new_match = self.input_result_match(
-            tournament, player1=3, player2=7, match_number=3)
+            id_player1=3, id_player2=7, match_number=3)
+        self.control_player.update_adversary_match(3, 7)
         self.add_match_with_update_player_pts_into_db(new_match)
         # joueur 4 vs 8
         new_match = self.input_result_match(
-            tournament, player1=4, player2=8, match_number=4)
+            id_player1=4, id_player2=8, match_number=4)
+        self.add_match_with_update_player_pts_into_db(new_match)
+        self.control_player.update_adversary_match(4, 8)
+        # date finished round
+        self.update_time_finished_round_with_link_tournament()
+
+    @staticmethod
+    def sorted_player_id_after_rank(dico_id_pts, pts, dico_id_rank):
+        list_player_by_pts = []
+        for id_player, pts_player in dico_id_pts.items():
+            if pts_player == pts:
+                list_player_by_pts.append(id_player)
+            else:
+                pass
+        liste_rank = []
+        for id_player in list_player_by_pts:
+            try:
+                player_rank = dico_id_rank.get(id_player)
+                liste_rank.append(player_rank)
+            except ValueError:
+                pass
+        liste_rank.sort()
+        return liste_rank
+
+    def generate_second_round(self):
+        count, tournament = self.extract_last()
+        Session = sessionmaker(bind=base.ENGINE)
+        session = Session()
+        count = session.query(
+            models.PlayersForTournament.players_tournament_id).count()
+        players = session.query(models.PlayersForTournament).get(
+            {"players_tournament_id": str(count)})
+        id_players_for_round2 = []
+
+        dico_players_id_pts = dict()
+        dico_players_id_pts["id" + str(
+            players.player_1.player_id)] = float(
+            players.player_1.pts_tournament)
+        dico_players_id_pts["id" + str(
+            players.player_2.player_id)] = float(
+            players.player_2.pts_tournament)
+        dico_players_id_pts["id" + str(
+            players.player_3.player_id)] = float(
+            players.player_3.pts_tournament)
+        dico_players_id_pts["id" + str(
+            players.player_4.player_id)] = float(
+            players.player_4.pts_tournament)
+        dico_players_id_pts["id" + str(
+            players.player_5.player_id)] = float(
+            players.player_5.pts_tournament)
+        dico_players_id_pts["id" + str(
+            players.player_6.player_id)] = float(
+            players.player_6.pts_tournament)
+        dico_players_id_pts["id" + str(
+            players.player_7.player_id)] = float(
+            players.player_7.pts_tournament)
+        dico_players_id_pts["id" + str(
+            players.player_8.player_id)] = float(
+            players.player_8.pts_tournament)
+
+        dico_players_id_rank = dict()
+        dico_players_id_rank["id" + str(
+            players.player_1.player_id)] = players.player_1.rank
+        dico_players_id_rank["id" + str(
+            players.player_2.player_id)] = players.player_2.rank
+        dico_players_id_rank["id" + str(
+            players.player_3.player_id)] = players.player_3.rank
+        dico_players_id_rank["id" + str(
+            players.player_4.player_id)] = players.player_4.rank
+        dico_players_id_rank["id" + str(
+            players.player_5.player_id)] = players.player_5.rank
+        dico_players_id_rank["id" + str(
+            players.player_6.player_id)] = players.player_6.rank
+        dico_players_id_rank["id" + str(
+            players.player_7.player_id)] = players.player_7.rank
+        dico_players_id_rank["id" + str(
+            players.player_8.player_id)] = players.player_8.rank
+
+        l1pts = self.sorted_player_id_after_rank(
+            dico_players_id_pts, 1, dico_players_id_rank)
+        l0_5pts = self.sorted_player_id_after_rank(
+            dico_players_id_pts, 0.5, dico_players_id_rank)
+        l0pts = self.sorted_player_id_after_rank(
+            dico_players_id_pts, 0, dico_players_id_rank)
+        id_players_for_round2.extend(l1pts)
+        id_players_for_round2.extend(l0_5pts)
+        id_players_for_round2.extend(l0pts)
+        id_players_round2 = []
+        for element in id_players_for_round2:
+            for key, values in dico_players_id_rank.items():
+                if values == element:
+                    id_players_round2.append(key[2:])
+        print(id_players_round2)
+        listing_players_for_round2 = []
+        for id_player in id_players_round2 :
+            player = self.control_player.extract_one_by_id(id_player)
+            listing_players_for_round2.append(player)
+        self.views_match.generate_other_round(listing_players_for_round2)
+
+        # joueur 1 vs 2
+        new_match = self.input_result_match(
+            id_player1=id_players_round2[0],
+            id_player2=id_players_round2[1], match_number=1)
+        self.control_player.update_adversary_match(
+            id_players_round2[0],
+            id_players_round2[1])
+        self.add_match_with_update_player_pts_into_db(new_match)
+
+        # joueur 3 vs 4
+        new_match = self.input_result_match(
+            id_player1=id_players_round2[2],
+            id_player2=id_players_round2[3], match_number=2)
+        self.control_player.update_adversary_match(
+            id_players_round2[2],
+            id_players_round2[3])
+        self.add_match_with_update_player_pts_into_db(new_match)
+
+        # joueur 5 vs 6
+        new_match = self.input_result_match(
+            id_player1=id_players_round2[4],
+            id_player2=id_players_round2[5], match_number=3)
+        self.control_player.update_adversary_match(
+            id_players_round2[4],
+            id_players_round2[5])
+        self.add_match_with_update_player_pts_into_db(new_match)
+
+        # joueur 7 vs 8
+        new_match = self.input_result_match(
+            id_player1=id_players_round2[6],
+            id_player2=id_players_round2[7], match_number=4)
+        self.control_player.update_adversary_match(
+            id_players_round2[6],
+            id_players_round2[7])
         self.add_match_with_update_player_pts_into_db(new_match)
         # date finished round
         self.update_time_finished_round_with_link_tournament()
 
-    def generate_second_round(self):
-        # extract list of players tournament by point
-        count_of_tournaments, tournament = self.extract_last()
-        players_listing, p_l_id = self.control_player.reorder_players_by_pts(
-            tournament
-        )
-        # view battle with players
-        self.views_match.generate_round2(players_listing)
-
     def generate_other_round(self):
-        pass
+        # extract list of players tournament by point
+        count, tournament = self.extract_last()
+        Session = sessionmaker(bind=base.ENGINE)
+        session = Session()
+        count = session.query(
+            models.PlayersForTournament.players_tournament_id).count()
+        players = session.query(models.PlayersForTournament).get(
+            {"players_tournament_id": str(count)})
+
+
+
