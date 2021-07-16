@@ -32,10 +32,6 @@ def init_db():
 
 def create_datetime_now():
     date = datetime.datetime.now(constants.TIME_ZONE)
-    # date = date_now.strftime('%d/%m/%Y %H:%M:%S')
-    # date = date_now.strftime('%d/%m/%Y')
-    # date = datetime.datetime.strptime(date, '%d/%m/%Y')
-    # hours = date_now.strftime("%H:%M")
     return date
 
 
@@ -164,7 +160,6 @@ class Menu:
             elif last_tournament.players is not None:
                 self.views_tournaments.last_tournament(last_tournament)
                 if last_tournament.rounds1 is None:
-                    self.views_tournaments.modify_players_for_tournament()
                     self.views_rounds.rounds1_none()
                 elif last_tournament.rounds2 is None:
                     self.views_rounds.rounds2_none()
@@ -235,47 +230,36 @@ class Menu:
             self.views_menu.summary_submenu_rounds()
             count, last_tournament = self.control_tournament.extract_last()
             if last_tournament.rounds1 is None:
-                # create round
                 self.control_tournament.add_round(
                     round_number=1,
                     count_of_tournaments=count)
-                self.control_tournament.add_link_between_round_tournament(
-                    last_tournament
-                )
-                # generate first round
                 self.control_tournament.generate_first_round()
                 self.views_menu.return_main_menu()
                 execute = False
             elif last_tournament.rounds2 is None:
+                count, last_tournament = self.control_tournament.extract_last()
                 self.views_rounds.rounds2_none()
-                """
                 self.control_tournament.add_round(
                     round_number=2,
                     count_of_tournaments=count)
-                self.control_tournament.add_link_between_round_tournament(
-                    last_tournament
-                )
-                """
                 self.control_tournament.generate_second_round()
                 self.views_menu.return_main_menu()
                 execute = False
             elif last_tournament.rounds3 is None:
+                count, last_tournament = self.control_tournament.extract_last()
                 self.views_rounds.rounds3_none()
                 self.control_tournament.add_round(
                     count_of_tournaments=count,
                     round_number=3)
-                self.control_tournament.add_link_between_round_tournament(
-                    last_tournament)
                 self.control_tournament.generate_other_round()
                 self.views_menu.return_main_menu()
                 execute = False
             elif last_tournament.rounds4 is None:
+                count, last_tournament = self.control_tournament.extract_last()
                 self.views_rounds.rounds4_none()
                 self.control_tournament.add_round(
                     count_of_tournaments=count,
                     round_number=4)
-                self.control_tournament.add_link_between_round_tournament(
-                    last_tournament)
                 self.control_tournament.generate_other_round()
                 self.views_menu.return_main_menu()
 

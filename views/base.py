@@ -215,7 +215,7 @@ class Rounds:
 
     @staticmethod
     def str_round(show_round):
-        print(show_round,"\n")
+        print(show_round, "\n")
 
 
 class Tournament:
@@ -228,8 +228,12 @@ class Tournament:
     @staticmethod
     def input_name_location():
         print(language.CREATE_NEW_TOURNAMENT)
-        name = str(input(language.INPUT_TOURNAMENT_NAME))
-        location = str(input(language.INPUT_TOURNAMENT_LOCATION))
+        name = ""
+        while len(name) < 3:
+            name = str(input(language.INPUT_TOURNAMENT_NAME))
+        location = ""
+        while len(location) < 3:
+            location = str(input(language.INPUT_TOURNAMENT_LOCATION))
         return name, location
 
     @staticmethod

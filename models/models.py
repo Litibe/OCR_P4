@@ -29,18 +29,18 @@ class Players(Base):
         self.rank = rank
 
     def __str__(self):
-        if self.pts_tournament is None :
+        if self.pts_tournament is None:
             self.pts = ""
-        else :
-            self.pts = f"{self.pts_tournament} + \
-                       {language.STR_PLAYER_PTS_TOURNAMENT2}"
+        else:
+            self.pts = f"{self.pts_tournament} "\
+                       f"{language.STR_PLAYER_PTS_TOURNAMENT2}"
         return f"{language.STR_PLAYER_1}{self.player_id} - {self.last_name} " \
                f"{self.first_name} - " \
                f"{self.birthday.strftime('%d/%m/%Y')} - " \
                f"{language.STR_PLAYER_3}" \
                f"{self.sex} - {language.STR_PLAYER_RANK} " \
                f"{self.rank} {language.STR_PLAYER_RANK2} - " \
-               f"{self.pts_tournament} {language.STR_PLAYER_PTS_TOURNAMENT2}"
+               f"{self.pts}"
 
     def watch_pts_tournament(self):
         return f"{self.last_name} {self.first_name} " \

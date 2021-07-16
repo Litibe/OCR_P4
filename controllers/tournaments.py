@@ -1,3 +1,4 @@
+from random import shuffle
 from sqlalchemy.orm import sessionmaker
 
 import constants
@@ -86,7 +87,7 @@ class ControllersTournament:
             tournament_id_players.sort()
             # extract ID player into Name_player with database
             listing_players = self.control_player.extract_listing_players(
-                table_players_id)
+                tournament_id_players)
             # confirm input ID players OK or Not
             choice_confirm = ["Y", "N"]
             input_confirm = ""
@@ -161,24 +162,6 @@ class ControllersTournament:
         session.commit()
 
     @staticmethod
-    def add_link_between_round_tournament(last_tournament):
-        Session = sessionmaker(bind=base.ENGINE)
-        session = Session()
-        count_of_rounds = session.query(models.Rounds.round_id).count()
-        if last_tournament.rounds1 is None:
-            last_tournament.rounds1 = int(count_of_rounds)
-            session.commit()
-        elif last_tournament.rounds2 is None:
-            last_tournament.rounds2 = int(count_of_rounds)
-            session.commit()
-        elif last_tournament.rounds3 is None:
-            last_tournament.rounds3 = int(count_of_rounds)
-            session.commit()
-        elif last_tournament.rounds4 is None:
-            last_tournament.rounds4 = int(count_of_rounds)
-            session.commit()
-
-    @staticmethod
     def extract_all_rounds():
         Session = sessionmaker(bind=base.ENGINE)
         session = Session()
@@ -208,7 +191,14 @@ class ControllersTournament:
             models.Tournament.tournament_id).count()
         actual_tournament = session.query(models.Tournament).get(
             {"tournament_id": str(count_of_tournament)})
-        actual_tournament.rounds1 = int(count_of_rounds)
+        if actual_tournament.rounds1 is None:
+            actual_tournament.rounds1 = int(count_of_rounds)
+        elif actual_tournament.rounds2 is None:
+            actual_tournament.rounds2 = int(count_of_rounds)
+        elif actual_tournament.rounds3 is None:
+            actual_tournament.rounds3 = int(count_of_rounds)
+        elif actual_tournament.rounds4 is None:
+            actual_tournament.rounds4 = int(count_of_rounds)
         session.commit()
 
     @staticmethod
@@ -296,6 +286,7 @@ class ControllersTournament:
         players_listing, p_l_id = self.control_player.reorder_players_by_rank(
             tournament
         )
+
         for id_player in p_l_id:
             self.control_player.erase_pts_match_player(id_player)
         # view battle with players
@@ -303,26 +294,34 @@ class ControllersTournament:
 
         # joueur 1 vs 5
         new_match = self.input_result_match(
-            id_player1=1, id_player2=5, match_number=1)
-        self.control_player.update_adversary_match(1, 5)
+            id_player1=p_l_id[0],
+            id_player2=p_l_id[4], match_number=1)
+        self.control_player.update_adversary_match(
+            p_l_id[0], p_l_id[4])
         self.add_match_with_update_player_pts_into_db(new_match)
 
         # joueur 2 vs 6
         new_match = self.input_result_match(
-            id_player1=2, id_player2=6, match_number=2)
-        self.control_player.update_adversary_match(2, 6)
+            id_player1=p_l_id[1],
+            id_player2=p_l_id[5], match_number=2)
+        self.control_player.update_adversary_match(
+            p_l_id[1], p_l_id[5])
         self.add_match_with_update_player_pts_into_db(new_match)
 
         # joueur 3 vs 7
         new_match = self.input_result_match(
-            id_player1=3, id_player2=7, match_number=3)
-        self.control_player.update_adversary_match(3, 7)
+            id_player1=p_l_id[2],
+            id_player2=p_l_id[6], match_number=3)
+        self.control_player.update_adversary_match(
+            p_l_id[2], p_l_id[6])
         self.add_match_with_update_player_pts_into_db(new_match)
         # joueur 4 vs 8
         new_match = self.input_result_match(
-            id_player1=4, id_player2=8, match_number=4)
+            id_player1=p_l_id[3],
+            id_player2=p_l_id[7], match_number=4)
+        self.control_player.update_adversary_match(
+            p_l_id[3], p_l_id[7])
         self.add_match_with_update_player_pts_into_db(new_match)
-        self.control_player.update_adversary_match(4, 8)
         # date finished round
         self.update_time_finished_round_with_link_tournament()
 
@@ -345,58 +344,57 @@ class ControllersTournament:
         return liste_rank
 
     def generate_second_round(self):
-        count, tournament = self.extract_last()
         Session = sessionmaker(bind=base.ENGINE)
         session = Session()
         count = session.query(
             models.PlayersForTournament.players_tournament_id).count()
-        players = session.query(models.PlayersForTournament).get(
+        l_players = session.query(models.PlayersForTournament).get(
             {"players_tournament_id": str(count)})
         id_players_for_round2 = []
 
         dico_players_id_pts = dict()
         dico_players_id_pts["id" + str(
-            players.player_1.player_id)] = float(
-            players.player_1.pts_tournament)
+            l_players.player_1.player_id)] = float(
+            l_players.player_1.pts_tournament)
         dico_players_id_pts["id" + str(
-            players.player_2.player_id)] = float(
-            players.player_2.pts_tournament)
+            l_players.player_2.player_id)] = float(
+            l_players.player_2.pts_tournament)
         dico_players_id_pts["id" + str(
-            players.player_3.player_id)] = float(
-            players.player_3.pts_tournament)
+            l_players.player_3.player_id)] = float(
+            l_players.player_3.pts_tournament)
         dico_players_id_pts["id" + str(
-            players.player_4.player_id)] = float(
-            players.player_4.pts_tournament)
+            l_players.player_4.player_id)] = float(
+            l_players.player_4.pts_tournament)
         dico_players_id_pts["id" + str(
-            players.player_5.player_id)] = float(
-            players.player_5.pts_tournament)
+            l_players.player_5.player_id)] = float(
+            l_players.player_5.pts_tournament)
         dico_players_id_pts["id" + str(
-            players.player_6.player_id)] = float(
-            players.player_6.pts_tournament)
+            l_players.player_6.player_id)] = float(
+            l_players.player_6.pts_tournament)
         dico_players_id_pts["id" + str(
-            players.player_7.player_id)] = float(
-            players.player_7.pts_tournament)
+            l_players.player_7.player_id)] = float(
+            l_players.player_7.pts_tournament)
         dico_players_id_pts["id" + str(
-            players.player_8.player_id)] = float(
-            players.player_8.pts_tournament)
+            l_players.player_8.player_id)] = float(
+            l_players.player_8.pts_tournament)
 
         dico_players_id_rank = dict()
         dico_players_id_rank["id" + str(
-            players.player_1.player_id)] = players.player_1.rank
+            l_players.player_1.player_id)] = l_players.player_1.rank
         dico_players_id_rank["id" + str(
-            players.player_2.player_id)] = players.player_2.rank
+            l_players.player_2.player_id)] = l_players.player_2.rank
         dico_players_id_rank["id" + str(
-            players.player_3.player_id)] = players.player_3.rank
+            l_players.player_3.player_id)] = l_players.player_3.rank
         dico_players_id_rank["id" + str(
-            players.player_4.player_id)] = players.player_4.rank
+            l_players.player_4.player_id)] = l_players.player_4.rank
         dico_players_id_rank["id" + str(
-            players.player_5.player_id)] = players.player_5.rank
+            l_players.player_5.player_id)] = l_players.player_5.rank
         dico_players_id_rank["id" + str(
-            players.player_6.player_id)] = players.player_6.rank
+            l_players.player_6.player_id)] = l_players.player_6.rank
         dico_players_id_rank["id" + str(
-            players.player_7.player_id)] = players.player_7.rank
+            l_players.player_7.player_id)] = l_players.player_7.rank
         dico_players_id_rank["id" + str(
-            players.player_8.player_id)] = players.player_8.rank
+            l_players.player_8.player_id)] = l_players.player_8.rank
 
         l1pts = self.sorted_player_id_after_rank(
             dico_players_id_pts, 1, dico_players_id_rank)
@@ -412,9 +410,8 @@ class ControllersTournament:
             for key, values in dico_players_id_rank.items():
                 if values == element:
                     id_players_round2.append(key[2:])
-        print(id_players_round2)
         listing_players_for_round2 = []
-        for id_player in id_players_round2 :
+        for id_player in id_players_round2:
             player = self.control_player.extract_one_by_id(id_player)
             listing_players_for_round2.append(player)
         self.views_match.generate_other_round(listing_players_for_round2)
@@ -458,14 +455,83 @@ class ControllersTournament:
         self.update_time_finished_round_with_link_tournament()
 
     def generate_other_round(self):
-        # extract list of players tournament by point
-        count, tournament = self.extract_last()
-        Session = sessionmaker(bind=base.ENGINE)
-        session = Session()
-        count = session.query(
-            models.PlayersForTournament.players_tournament_id).count()
-        players = session.query(models.PlayersForTournament).get(
-            {"players_tournament_id": str(count)})
+        count_of_tournaments, last_tournament = self.extract_last()
+        last_listing_players = self.last_listing_players(count_of_tournaments)
+        self.listing_id_actual_tournament = [
+            last_listing_players.player_1.player_id,
+            last_listing_players.player_2.player_id,
+            last_listing_players.player_3.player_id,
+            last_listing_players.player_4.player_id,
+            last_listing_players.player_5.player_id,
+            last_listing_players.player_6.player_id,
+            last_listing_players.player_7.player_id,
+            last_listing_players.player_8.player_id]
 
+        listing_id_players_for_future_round = []
+        shuffle(self.listing_id_actual_tournament)
+        while len(self.listing_id_actual_tournament) > 1:
+            id_player0, \
+                id_player1 = self.search_if_player2_already_play_with_player1()
+
+            listing_id_players_for_future_round.append(id_player0)
+            listing_id_players_for_future_round.append(id_player1)
+
+        self.views_match.generate_other_round(
+            listing_id_players_for_future_round)
+
+        # joueur 1 vs 2
+        new_match = self.input_result_match(
+            id_player1=listing_id_players_for_future_round[0],
+            id_player2=listing_id_players_for_future_round[1], match_number=1)
+        self.control_player.update_adversary_match(
+            listing_id_players_for_future_round[0],
+            listing_id_players_for_future_round[1])
+        self.add_match_with_update_player_pts_into_db(new_match)
+
+        # joueur 3 vs 4
+        new_match = self.input_result_match(
+            id_player1=listing_id_players_for_future_round[2],
+            id_player2=listing_id_players_for_future_round[3], match_number=2)
+        self.control_player.update_adversary_match(
+            listing_id_players_for_future_round[2],
+            listing_id_players_for_future_round[3])
+        self.add_match_with_update_player_pts_into_db(new_match)
+
+        # joueur 5 vs 6
+        new_match = self.input_result_match(
+            id_player1=listing_id_players_for_future_round[4],
+            id_player2=listing_id_players_for_future_round[5], match_number=3)
+        self.control_player.update_adversary_match(
+            listing_id_players_for_future_round[4],
+            listing_id_players_for_future_round[5])
+        self.add_match_with_update_player_pts_into_db(new_match)
+
+        # joueur 7 vs 8
+        new_match = self.input_result_match(
+            id_player1=listing_id_players_for_future_round[6],
+            id_player2=listing_id_players_for_future_round[7], match_number=4)
+        self.control_player.update_adversary_match(
+            listing_id_players_for_future_round[6],
+            listing_id_players_for_future_round[7])
+        self.add_match_with_update_player_pts_into_db(new_match)
+        # date finished round
+        self.update_time_finished_round_with_link_tournament()
+
+    def search_if_player2_already_play_with_player1(self):
+        id_player0 = self.listing_id_actual_tournament.pop(0)
+        player0 = self.control_player.extract_one_by_id(id_player0)
+        search = True
+        id_player1 = ""
+        for id_player in self.listing_id_actual_tournament:
+            if search:
+                if str(id_player) not in player0.adversary_tournament:
+                    id_player1 = int(id_player)
+                    id_to_remove = self.listing_id_actual_tournament.index(
+                        id_player)
+                    self.listing_id_actual_tournament.pop(id_to_remove)
+                    search = False
+            else:
+                pass
+        return id_player0, id_player1
 
 

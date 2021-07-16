@@ -183,28 +183,31 @@ class ControllersPlayers:
         session.commit()
 
     @staticmethod
-    def update_adversary_match(id_player, id_adversary):
+    def update_adversary_match(id_player1, id_player2):
         Session = sessionmaker(bind=base.ENGINE)
         session = Session()
-        player = session.query(models.Players).get(
-            {"player_id": str(id_player)})
-        player.adversary_tournament += (str(id_adversary) + " , ")
+        player1 = session.query(models.Players).get(
+            {"player_id": str(id_player1)})
+        player1.adversary_tournament += (str(id_player2) + " , ")
+        player2 = session.query(models.Players).get(
+            {"player_id": str(id_player2)})
+        player2.adversary_tournament += (str(id_player1) + " , ")
         session.commit()
 
     def update_rank_player(self, id_player):
-        player_to_change_rank = self.extract_one_by_id(
-            id_player)
         Session = sessionmaker(bind=base.ENGINE)
         session = Session()
-        modify_rank = 0
+        new_rank = 0
         table_players_id = self.extract_players_id()
-        while modify_rank not in table_players_id:
-            modify_rank = self.views_players.input_new_rank(
+        player_to_change_rank = session.query(models.Players).get(
+            {"player_id": str(id_player)})
+        ancious_rank = player_to_change_rank.rank
+        while new_rank not in table_players_id:
+            new_rank = self.views_players.input_new_rank(
                 player_to_change_rank)
-
         ranks_players = self.extract_players_by(models.Players.rank)
         for players in ranks_players:
-            if players.rank >= modify_rank:
+            if players.rank <= ancious_rank:
                 player = session.query(models.Players).get(
                     {"player_id": str(players.player_id)})
                 player.rank += 1
@@ -212,7 +215,7 @@ class ControllersPlayers:
                 pass
         player_to_change_rank = session.query(models.Players).get(
                     {"player_id": str(id_player)})
-        player_to_change_rank.rank = modify_rank
+        player_to_change_rank.rank = new_rank
         session.commit()
 
     @staticmethod

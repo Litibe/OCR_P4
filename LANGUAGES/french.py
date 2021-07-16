@@ -93,12 +93,11 @@ ERROR_PLAYER_ALREADY_IN_TOURNAMENT = "Attention cet ID de joueur a déjà été 
 TOURNAMENT_NOT_END = "Tournoi toujours en cours !"
 # MENU_ADD_PLAYER
 INFORM_CREATE_PLAYER = "Vous avez sélectionné la création d'un nouveau " \
-                       "Joueur dans la BDD, " \
-                       "merci de completer les champs requis : "
+                       "joueur, merci de completer les champs requis : "
 LAST_NAME_PLAYER = "Le NOM du Joueur : "
 FIRST_NAME_PLAYER = "Le PRENOM du Joueur : "
 BIRTHDAY_PLAYER = "Sa Date de naissance au format dd/mm/yyyy : "
-SEX_PLAYER = "Son Sexe M ou F : "
+SEX_PLAYER = "Son Sexe MASCULIN ou FEMININ (m/f) : "
 INFORM_CREATE_PLAYER_INTO_DB = "--- Création du joueur dans la base de " \
                                "données ---"
 ERROR_MIN_PLAYERS_IN_DATABASE = "ATTENTION, la base de données ne contient " \
