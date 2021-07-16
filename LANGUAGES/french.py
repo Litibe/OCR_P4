@@ -14,7 +14,7 @@ STR_PLAYER_TOURNAMENT_1 = "Voici les ID de joueurs présents " \
 STR_PLAYER_TOURNAMENT_rank = "N° "
 STR_PLAYER_TOURNAMENT_rank2 = " au classement"
 
-STR_TOURNAMENT_1 = "Voici les détails du tournoi de l'ID N°"
+STR_TOURNAMENT_1 = "Voici les détails du tournoi - ID N°"
 STR_TOURNAMENT_2 = "Nom du tournoi :"
 STR_TOURNAMENT_3 = "Date de début de tournoi et son Lieu : le "
 STR_TOURNAMENT_4 = "Tournoi réalisé en "
@@ -65,7 +65,7 @@ ADD_PLAYERS_FOR_TOURNAMENT = "Choix 2 : Ajouter les huits joueurs pour " \
 MODIFY_PLAYERS_FOR_TOURNAMENT = "Choix 2 : Modifier la liste des ID de " \
                                 "joueurs avant lancement du 1er Round"
 
-LAST_TOURNAMENT = "Le tournoi en cours est : "
+LAST_TOURNAMENT = "Le tournoi en cours : "
 LAST_TOURNAMENT_NONE = "Il n'y a aucun tournoi de créer dans la " \
                        "base à ce jour."
 INFORM_CREATE_TOURNAMENT = "Vous avez sélectionné la création d'un nouveau" \

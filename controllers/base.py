@@ -137,16 +137,19 @@ class Menu:
     def main_tournament(self):
         execute = True
         while execute:
+            choice_menu = [0, 1, 2, 3]
             self.views_menu.main_menu_tournament()
             count_of_tournaments, \
-                last_tournament = self.control_tournament.extract_last()
+                last_tournt = self.control_tournament.extract_last()
             # control if tournament in SQL
-            if last_tournament is None:
+            if last_tournt is None or last_tournt.date_finished is not None:
                 self.views_tournaments.create_new_tournament()
                 self.views_menu.choice_return_main_menu()
             # control if tournament not finished in SQL
-            elif last_tournament.players is None:
-                self.views_tournaments.last_tournament(last_tournament)
+            elif last_tournt.players is None:
+                self.views_tournaments.last_tournament(last_tournt)
+                choice_menu.remove(1)
+                print(choice_menu)
                 sleep(1)
                 # extract id player into DB
                 table_players_id = self.control_player.extract_players_id()
@@ -157,22 +160,23 @@ class Menu:
                     table_players_id.append("")
                 self.views_menu.choice_add_players_for_tournament()
                 self.views_menu.choice_return_main_menu()
-            elif last_tournament.players is not None:
-                self.views_tournaments.last_tournament(last_tournament)
-                if last_tournament.rounds1 is None:
+            elif last_tournt.players is not None:
+                choice_menu.remove(1)
+                choice_menu.remove(2)
+                self.views_tournaments.last_tournament(last_tournt)
+                if last_tournt.rounds1 is None:
                     self.views_rounds.rounds1_none()
-                elif last_tournament.rounds2 is None:
+                elif last_tournt.rounds2 is None:
                     self.views_rounds.rounds2_none()
-                elif last_tournament.rounds3 is None:
+                elif last_tournt.rounds3 is None:
                     self.views_rounds.rounds3_none()
-                elif last_tournament.rounds4 is None:
+                elif last_tournt.rounds4 is None:
                     self.views_rounds.rounds4_none()
                 self.views_menu.choice_add_rounds()
                 self.views_menu.choice_return_main_menu()
 
-            choice = [0, 1, 2, 3]
             response_user = ""
-            while response_user not in choice:
+            while response_user not in choice_menu:
                 try:
                     response_user = int(
                         self.views_input.what_do_you_want())
@@ -219,6 +223,7 @@ class Menu:
             # menu add round
             elif response_user == 3:
                 self.submenu_round()
+                execute = False
 
             # return main menu
             elif response_user == 0:
@@ -235,7 +240,6 @@ class Menu:
                     count_of_tournaments=count)
                 self.control_tournament.generate_first_round()
                 self.views_menu.return_main_menu()
-                execute = False
             elif last_tournament.rounds2 is None:
                 count, last_tournament = self.control_tournament.extract_last()
                 self.views_rounds.rounds2_none()
@@ -244,7 +248,6 @@ class Menu:
                     count_of_tournaments=count)
                 self.control_tournament.generate_second_round()
                 self.views_menu.return_main_menu()
-                execute = False
             elif last_tournament.rounds3 is None:
                 count, last_tournament = self.control_tournament.extract_last()
                 self.views_rounds.rounds3_none()
@@ -253,7 +256,6 @@ class Menu:
                     round_number=3)
                 self.control_tournament.generate_other_round()
                 self.views_menu.return_main_menu()
-                execute = False
             elif last_tournament.rounds4 is None:
                 count, last_tournament = self.control_tournament.extract_last()
                 self.views_rounds.rounds4_none()
@@ -264,6 +266,19 @@ class Menu:
                 self.views_menu.return_main_menu()
                 # tournament date end
                 self.control_tournament.update_time_finished_tournament()
+                listing_players\
+                    = self.control_tournament.last_listing_players(count)
+                listing_id_actual_tournament = [
+                    listing_players.player_1.player_id,
+                    listing_players.player_2.player_id,
+                    listing_players.player_3.player_id,
+                    listing_players.player_4.player_id,
+                    listing_players.player_5.player_id,
+                    listing_players.player_6.player_id,
+                    listing_players.player_7.player_id,
+                    listing_players.player_8.player_id]
+                for id_player in listing_id_actual_tournament:
+                    self.control_player.erase_pts_match_player(id_player)
                 execute = False
 
     def main_rapport(self):

@@ -179,6 +179,8 @@ class ControllersPlayers:
         session = Session()
         player = session.query(models.Players).get(
             {"player_id": str(id_player)})
+        if player.pts_tournament is None:
+            player.pts_tournament = 0
         player.pts_tournament += float(pts_player)
         session.commit()
 
@@ -188,9 +190,13 @@ class ControllersPlayers:
         session = Session()
         player1 = session.query(models.Players).get(
             {"player_id": str(id_player1)})
+        if player1.adversary_tournament is None:
+            player1.adversary_tournament = ""
         player1.adversary_tournament += (str(id_player2) + " , ")
         player2 = session.query(models.Players).get(
             {"player_id": str(id_player2)})
+        if player2.adversary_tournament is None:
+            player2.adversary_tournament = ""
         player2.adversary_tournament += (str(id_player1) + " , ")
         session.commit()
 
@@ -201,18 +207,24 @@ class ControllersPlayers:
         table_players_id = self.extract_players_id()
         player_to_change_rank = session.query(models.Players).get(
             {"player_id": str(id_player)})
+        session.commit()
         ancious_rank = player_to_change_rank.rank
         while new_rank not in table_players_id:
             new_rank = self.views_players.input_new_rank(
                 player_to_change_rank)
         ranks_players = self.extract_players_by(models.Players.rank)
         for players in ranks_players:
-            if players.rank <= ancious_rank:
+            if ancious_rank >= players.rank >= new_rank:
+                Session = sessionmaker(bind=base.ENGINE)
+                session = Session()
                 player = session.query(models.Players).get(
                     {"player_id": str(players.player_id)})
                 player.rank += 1
+                session.commit()
             else:
                 pass
+        Session = sessionmaker(bind=base.ENGINE)
+        session = Session()
         player_to_change_rank = session.query(models.Players).get(
                     {"player_id": str(id_player)})
         player_to_change_rank.rank = new_rank

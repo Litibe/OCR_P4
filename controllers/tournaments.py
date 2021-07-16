@@ -21,6 +21,7 @@ class ControllersTournament:
         self.views_tournaments = views.base.Tournament()
         self.views_rapports = views.base.Rapports()
         self.generate = base.GeneratePDF()
+        self.listing_id_actual_tournament = []
 
     def create_tournament(self):
         name, location = self.views_tournaments.input_name_location()
@@ -297,9 +298,6 @@ class ControllersTournament:
         players_listing, p_l_id = self.control_player.reorder_players_by_rank(
             tournament
         )
-
-        for id_player in p_l_id:
-            self.control_player.erase_pts_match_player(id_player)
         # view battle with players
         self.views_match.generate_round1(players_listing)
 
@@ -326,6 +324,7 @@ class ControllersTournament:
         self.control_player.update_adversary_match(
             p_l_id[2], p_l_id[6])
         self.add_match_with_update_player_pts_into_db(new_match)
+
         # joueur 4 vs 8
         new_match = self.input_result_match(
             id_player1=p_l_id[3],
@@ -468,7 +467,7 @@ class ControllersTournament:
     def generate_other_round(self):
         count_of_tournaments, last_tournament = self.extract_last()
         last_listing_players = self.last_listing_players(count_of_tournaments)
-        self.listing_id_actual_tournament = [
+        listing_id_actual_tournament = [
             last_listing_players.player_1.player_id,
             last_listing_players.player_2.player_id,
             last_listing_players.player_3.player_id,
@@ -479,13 +478,20 @@ class ControllersTournament:
             last_listing_players.player_8.player_id]
 
         listing_id_players_for_future_round = []
-        shuffle(self.listing_id_actual_tournament)
-        while len(self.listing_id_actual_tournament) > 1:
-            id_player0, \
-                id_player1 = self.search_if_player2_already_play_with_player1()
+        while len(listing_id_players_for_future_round) != 8:
+            self.listing_id_actual_tournament = listing_id_actual_tournament
+            shuffle(self.listing_id_actual_tournament)
+            while len(self.listing_id_actual_tournament) > 1:
+                id_player0, \
+                    id_player1 = self.search_adversary_round()
 
-            listing_id_players_for_future_round.append(id_player0)
-            listing_id_players_for_future_round.append(id_player1)
+                listing_id_players_for_future_round.append(id_player0)
+                listing_id_players_for_future_round.append(id_player1)
+            try:
+                if listing_id_players_for_future_round[7] == "":
+                    listing_id_players_for_future_round = []
+            except IndexError:
+                listing_id_players_for_future_round = []
 
         listing_players_for_round = []
         for id_player in listing_id_players_for_future_round:
@@ -532,7 +538,7 @@ class ControllersTournament:
         # date finished round
         self.update_time_finished_round_with_link_tournament()
 
-    def search_if_player2_already_play_with_player1(self):
+    def search_adversary_round(self):
         id_player0 = self.listing_id_actual_tournament.pop(0)
         player0 = self.control_player.extract_one_by_id(id_player0)
         search = True
@@ -548,5 +554,3 @@ class ControllersTournament:
             else:
                 pass
         return id_player0, id_player1
-
-

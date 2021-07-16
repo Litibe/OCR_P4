@@ -174,7 +174,7 @@ class Players:
 
     @staticmethod
     def watch_player_details(player):
-        print(str(player))
+        print(player)
 
 
 class Rapports:
@@ -222,7 +222,6 @@ class Tournament:
 
     @staticmethod
     def create_new_tournament():
-        print(language.LAST_TOURNAMENT_NONE)
         print(language.CREATE_NEW_TOURNAMENT)
 
     @staticmethod
