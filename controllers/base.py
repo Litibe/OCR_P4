@@ -262,9 +262,8 @@ class Menu:
                     round_number=4)
                 self.control_tournament.generate_other_round()
                 self.views_menu.return_main_menu()
-
                 # tournament date end
-                execute = True
+                execute = False
 
     def main_rapport(self):
         execute = True

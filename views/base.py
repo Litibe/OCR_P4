@@ -65,7 +65,7 @@ class Match:
 
     @staticmethod
     def generate_other_round(players_listing):
-        print(f""" {language.ROUNDS2_NONE} : 
+        print(f"""
         Match1 : {players_listing[0]} 
                 VS {players_listing[1]}
         Match2 : {players_listing[2]} 

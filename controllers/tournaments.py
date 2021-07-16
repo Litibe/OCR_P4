@@ -202,6 +202,17 @@ class ControllersTournament:
         session.commit()
 
     @staticmethod
+    def update_time_finished_tournament():
+        Session = sessionmaker(bind=base.ENGINE)
+        session = Session()
+        count_of_tournaments = session.query(
+            models.Tournament.tournament_id).count()
+        last_tournament = session.query(models.Tournament).get(
+            {"tournament_id": str(count_of_tournaments)})
+        last_tournament.date_finished = base.create_datetime_now()
+        session.commit()
+
+    @staticmethod
     def add_listing_players_into_db(listing_players, count_of_tournaments):
         Session = sessionmaker(bind=base.ENGINE)
         session = Session()
@@ -476,8 +487,12 @@ class ControllersTournament:
             listing_id_players_for_future_round.append(id_player0)
             listing_id_players_for_future_round.append(id_player1)
 
+        listing_players_for_round = []
+        for id_player in listing_id_players_for_future_round:
+            player = self.control_player.extract_one_by_id(id_player)
+            listing_players_for_round.append(player)
         self.views_match.generate_other_round(
-            listing_id_players_for_future_round)
+            listing_players_for_round)
 
         # joueur 1 vs 2
         new_match = self.input_result_match(
