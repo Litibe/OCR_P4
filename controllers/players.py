@@ -86,40 +86,48 @@ class ControllersPlayers:
         return players_dict_id
 
     @staticmethod
-    def players_by_abc(tournament):
+    def players_by_abc(players_for_t):
         players_listing = [
-            tournament.player_1.last_name + " " +
-            tournament.player_1.first_name +
+            players_for_t.player_1.last_name + " " +
+            players_for_t.player_1.first_name +
             " " + language.STR_PLAYER_TOURNAMENT_rank + str(
-                tournament.player_1.rank),
-            tournament.player_2.last_name + " " +
-            tournament.player_2.first_name +
+                players_for_t.player_1.rank)
+            + language.STR_PLAYER_TOURNAMENT_rank2,
+            players_for_t.player_2.last_name + " " +
+            players_for_t.player_2.first_name +
             " " + language.STR_PLAYER_TOURNAMENT_rank + str(
-                tournament.player_2.rank),
-            tournament.player_3.last_name + " " +
-            tournament.player_3.first_name +
+                players_for_t.player_2.rank)
+            + language.STR_PLAYER_TOURNAMENT_rank2,
+            players_for_t.player_3.last_name + " " +
+            players_for_t.player_3.first_name +
             " " + language.STR_PLAYER_TOURNAMENT_rank + str(
-                tournament.player_3.rank),
-            tournament.player_4.last_name + " " +
-            tournament.player_4.first_name +
+                players_for_t.player_3.rank)
+            + language.STR_PLAYER_TOURNAMENT_rank2,
+            players_for_t.player_4.last_name + " " +
+            players_for_t.player_4.first_name +
             " " + language.STR_PLAYER_TOURNAMENT_rank + str(
-                tournament.player_4.rank),
-            tournament.player_5.last_name + " " +
-            tournament.player_5.first_name +
+                players_for_t.player_4.rank)
+            + language.STR_PLAYER_TOURNAMENT_rank2,
+            players_for_t.player_5.last_name + " " +
+            players_for_t.player_5.first_name +
             " " + language.STR_PLAYER_TOURNAMENT_rank + str(
-                tournament.player_5.rank),
-            tournament.player_6.last_name + " " +
-            tournament.player_6.first_name +
+                players_for_t.player_5.rank)
+            + language.STR_PLAYER_TOURNAMENT_rank2,
+            players_for_t.player_6.last_name + " " +
+            players_for_t.player_6.first_name +
             " " + language.STR_PLAYER_TOURNAMENT_rank + str(
-                tournament.player_6.rank),
-            tournament.player_7.last_name + " " +
-            tournament.player_7.first_name +
+                players_for_t.player_6.rank)
+            + language.STR_PLAYER_TOURNAMENT_rank2,
+            players_for_t.player_7.last_name + " " +
+            players_for_t.player_7.first_name +
             " " + language.STR_PLAYER_TOURNAMENT_rank + str(
-                tournament.player_7.rank),
-            tournament.player_8.last_name + " " +
-            tournament.player_8.first_name +
+                players_for_t.player_7.rank)
+            + language.STR_PLAYER_TOURNAMENT_rank2,
+            players_for_t.player_8.last_name + " " +
+            players_for_t.player_8.first_name +
             " " + language.STR_PLAYER_TOURNAMENT_rank + str(
-                tournament.player_8.rank)]
+                players_for_t.player_8.rank)
+            + language.STR_PLAYER_TOURNAMENT_rank2]
         players_listing.sort()
         return players_listing
 
@@ -236,6 +244,6 @@ class ControllersPlayers:
         session = Session()
         player = session.query(models.Players).get(
             {"player_id": str(id_player)})
-        player.pts_tournament = 0
-        player.adversary_tournament = ""
+        player.pts_tournament = None
+        player.adversary_tournament = None
         session.commit()

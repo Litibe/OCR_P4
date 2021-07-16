@@ -194,6 +194,18 @@ class Rapports:
         for element in players_listing:
             print("\t", element)
 
+    @staticmethod
+    def input_number_tournament(count_of_tournaments):
+        print(language.RAPPORT_INPUT_NUMBER_TOURNAMENT)
+        number_tournament = ""
+        while isinstance(number_tournament, str):
+            try:
+                number_tournament = int(input(language.INPUT_NUMBER_TOURNAMENT))
+            except TypeError:
+                print(language.ERROR_INPUT_CHOICE)
+            except ValueError:
+                print(language.ERROR_INPUT_CHOICE)
+        return number_tournament
 
 class Rounds:
 

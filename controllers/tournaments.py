@@ -1,4 +1,4 @@
-from random import shuffle
+from random import randint
 from sqlalchemy.orm import sessionmaker
 
 import constants
@@ -480,10 +480,10 @@ class ControllersTournament:
         listing_id_players_for_future_round = []
         while len(listing_id_players_for_future_round) != 8:
             self.listing_id_actual_tournament = listing_id_actual_tournament
-            shuffle(self.listing_id_actual_tournament)
+            print(self.listing_id_actual_tournament)
             while len(self.listing_id_actual_tournament) > 1:
-                id_player0, \
-                    id_player1 = self.search_adversary_round()
+                id_player0, id_player1 = self.search_adversary_round(
+                    self.listing_id_actual_tournament)
 
                 listing_id_players_for_future_round.append(id_player0)
                 listing_id_players_for_future_round.append(id_player1)
@@ -538,19 +538,22 @@ class ControllersTournament:
         # date finished round
         self.update_time_finished_round_with_link_tournament()
 
-    def search_adversary_round(self):
+    def search_adversary_round(self, listing_id_actual_tournament):
         id_player0 = self.listing_id_actual_tournament.pop(0)
         player0 = self.control_player.extract_one_by_id(id_player0)
         search = True
         id_player1 = ""
-        for id_player in self.listing_id_actual_tournament:
-            if search:
-                if str(id_player) not in player0.adversary_tournament:
-                    id_player1 = int(id_player)
-                    id_to_remove = self.listing_id_actual_tournament.index(
-                        id_player)
-                    self.listing_id_actual_tournament.pop(id_to_remove)
-                    search = False
+        while search:
+            print(listing_id_actual_tournament)
+            id_player = listing_id_actual_tournament[
+                randint(0, len(listing_id_actual_tournament)-1)]
+
+            if str(id_player) not in player0.adversary_tournament:
+                id_player1 = int(id_player)
+                id_to_remove = self.listing_id_actual_tournament.index(
+                            id_player)
+                self.listing_id_actual_tournament.pop(id_to_remove)
+                search = False
             else:
                 pass
         return id_player0, id_player1

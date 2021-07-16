@@ -21,6 +21,7 @@ STR_TOURNAMENT_4 = "Tournoi réalisé en "
 STR_TOURNAMENT_5 = "tours"
 STR_TOURNAMENT_6 = "Le contrôle de temps est le"
 STR_TOURNAMENT_7 = "Description du tournoi : "
+STR_TOURNAMENT_STARTED = "Date de début de tournoi"
 
 STR_MATCH_1 = "Il s'agit du match ID n°"
 STR_MATCH_2 = "avec la configuration : "
@@ -138,7 +139,12 @@ RAPPORT_TOURNAMENT_LIST_ALL = "--- Listing des Tournoi - " \
                               "Tri par ID de Tournoi ---"
 RAPPORT_LIST_ROUNDS_OF_TOURNAMENT = "--- Listing des Tours d'un tournoi ---"
 RAPPORT_LIST_MATCHS_OF_TOURNAMENT = "--- Listing des Matchs d'un tournoi ---"
-
+RAPPORT_INPUT_NUMBER_TOURNAMENT = "Merci de saisir l'ID de Tournoi pour" \
+                                  " l'extraction : \n"\
+                                "Si vous souhaitez avoir la " \
+                                  "liste des tournois en" \
+                                " base de données TAPER LE CHOIX 0 \n "
+INPUT_NUMBER_TOURNAMENT = "Merci de saisir l'ID du Tournoi concerné svp :"
 # ROUNDS
 CHOICE_ADD_ROUNDS = "Choix 3 : Ajouter un nouveau tour au tournoi"
 SUMMARY_SUBMENU_ROUNDS = """
@@ -177,3 +183,4 @@ ERROR_SELECT_PLAYER_INTO_DB = "ERREUR : Merci de taper un ID de joueur" \
                               " présent dans la base de données svp."
 YOU_SELECT = "Vous avez sélectionné : "
 INPUT_NEW_RANK = "Merci de saisir le nouveau classement du joueur svp : "
+
