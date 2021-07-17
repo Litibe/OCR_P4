@@ -122,6 +122,14 @@ class ControllersTournament:
         return count_of_tournaments, last_tournament
 
     @staticmethod
+    def extract_one(tournament_id):
+        Session = sessionmaker(bind=base.ENGINE)
+        session = Session()
+        one_tournament = session.query(models.Tournament).get(
+            {"tournament_id": str(tournament_id)})
+        return one_tournament
+
+    @staticmethod
     def players_per_t():
         Session = sessionmaker(bind=base.ENGINE)
         session = Session()
@@ -253,7 +261,7 @@ class ControllersTournament:
 
     # ROUNDS#####
     def add_round(self, round_number, count_of_tournaments):
-        round_name = "Rounds N°" + str(
+        round_name = language.ROUNDS_NAME + str(
             round_number) + language.TOURNAMENT_NUMBER + str(
             count_of_tournaments)
         date = self.controller.create_datetime_now()
@@ -480,7 +488,6 @@ class ControllersTournament:
         listing_id_players_for_future_round = []
         while len(listing_id_players_for_future_round) != 8:
             self.listing_id_actual_tournament = listing_id_actual_tournament
-            print(self.listing_id_actual_tournament)
             while len(self.listing_id_actual_tournament) > 1:
                 id_player0, id_player1 = self.search_adversary_round(
                     self.listing_id_actual_tournament)
@@ -544,7 +551,6 @@ class ControllersTournament:
         search = True
         id_player1 = ""
         while search:
-            print(listing_id_actual_tournament)
             id_player = listing_id_actual_tournament[
                 randint(0, len(listing_id_actual_tournament)-1)]
 

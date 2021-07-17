@@ -132,7 +132,6 @@ class Menu:
                 self.views_players.watch_player_details(player)
 
             elif response_user == 0:
-                self.views_menu.return_main_menu()
                 run = False
 
     def main_tournament(self):
@@ -150,7 +149,6 @@ class Menu:
             elif last_tournt.players is None:
                 self.views_tournaments.last_tournament(last_tournt)
                 choice_menu.remove(1)
-                print(choice_menu)
                 sleep(1)
                 # extract id player into DB
                 table_players_id = self.control_player.extract_players_id()
@@ -280,6 +278,20 @@ class Menu:
                     listing_players.player_8.player_id]
                 for id_player in listing_id_actual_tournament:
                     self.control_player.erase_pts_match_player(id_player)
+                count_of_tournaments, \
+                    last_tournament = self.control_tournament.extract_last()
+                listing = [language.STR_PLAYER_TOURNAMENT_1 +
+                           str(count_of_tournaments),
+                           language.STR_TOURNAMENT_2 +
+                           last_tournament.name,
+                           last_tournament.rounds_details_1,
+                           last_tournament.rounds_details_2,
+                           last_tournament.rounds_details_3,
+                           last_tournament.rounds_details_4
+                           ]
+                self.generate.rapport_pdf_for_tournament(
+                    listing,
+                    language.RAPPORT_LIST_ROUNDS_OF_TOURNAMENT)
                 execute = False
 
     def main_rapport(self):
@@ -332,45 +344,7 @@ class Menu:
                 )
 
             elif response_user == 21:
-                count_of_tournaments, \
-                    last_tournament = self.control_tournament.extract_last()
-
-                wait_input = True
-                while wait_input:
-                    response_user = ""
-                    while isinstance(response_user, str):
-                        try:
-                            response_user = int(
-                                self.views_rapports.input_number_tournament(
-                                    count_of_tournaments))
-                        except TypeError:
-                            self.views_error.input_choice()
-                        except ValueError:
-                            self.views_error.input_choice()
-                    if response_user == 0:
-                        all_tournaments = self.control_tournament.extract_all()
-                        listing_tour = ""
-                        for tour in all_tournaments:
-                            listing_tour += language.STR_TOURNAMENT_1
-                            listing_tour += str(tour.tournament_id)
-                            listing_tour += "\n"
-                            listing_tour += "\t" + str(tour.name)
-                            listing_tour += " "
-                            listing_tour += language.STR_TOURNAMENT_STARTED
-                            listing_tour += tour.date_started.strftime(
-                                '%d/%m/%Y %H:%M:%S')
-                            listing_tour += "\n"
-                        self.generate.rapport_pdf_for_players_tournament(
-                            listing_tour,
-                            language.RAPPORT_TOURNAMENT_LIST_ALL)
-                    elif response_user < 0:
-                        response_user = ""
-                        print(language.ERROR_INPUT_CHOICE)
-                    elif response_user > count_of_tournaments:
-                        response_user = ""
-                        print(language.ERROR_INPUT_CHOICE)
-                    else:
-                        wait_input = False
+                response_user = self.input_number_tournament()
 
                 # players by last_name in tournament
                 Session = sessionmaker(bind=ENGINE)
@@ -380,56 +354,21 @@ class Menu:
                     {"players_tournament_id": str(response_user)})
 
                 players_listing = self.control_player.players_by_abc(
-                        players_for_t)
+                    players_for_t)
 
                 self.views_rapports.listing_players_tournaments(
-                        response_user, players_listing,
-                        language.RAPPORT_TOURNAMENT_LIST_BY_ABC_LAST_NAME
-                    )
+                    response_user, players_listing,
+                    language.RAPPORT_TOURNAMENT_LIST_BY_ABC_LAST_NAME
+                )
                 self.generate.rapport_pdf_for_players(
                     players_listing,
-                    language.RAPPORT_TOURNAMENT_LIST_BY_RANK)
+                    (language.RAPPORT_TOURNAMENT_LIST_BY_ABC_LAST_NAME +
+                     "\n" + language.STR_PLAYER_TOURNAMENT_1 +
+                     str(response_user)))
                 sleep(1)
 
             elif response_user == 22:
-                count_of_tournaments, \
-                    last_tournament = self.control_tournament.extract_last()
-                wait_input = True
-                while wait_input:
-                    response_user = ""
-                    while isinstance(response_user, str):
-                        try:
-                            response_user = int(
-                                self.views_rapports.input_number_tournament(
-                                    count_of_tournaments))
-                        except TypeError:
-                            self.views_error.input_choice()
-                        except ValueError:
-                            self.views_error.input_choice()
-                    if response_user == 0:
-                        all_tournaments = self.control_tournament.extract_all()
-                        listing_tour = ""
-                        for tour in all_tournaments:
-                            listing_tour += language.STR_TOURNAMENT_1
-                            listing_tour += str(tour.tournament_id)
-                            listing_tour += "\n"
-                            listing_tour += "\t" + str(tour.name)
-                            listing_tour += " "
-                            listing_tour += language.STR_TOURNAMENT_STARTED
-                            listing_tour += tour.date_started.strftime(
-                                '%d/%m/%Y %H:%M:%S')
-                            listing_tour += "\n"
-                        self.generate.rapport_pdf_for_players_tournament(
-                            listing_tour,
-                            language.RAPPORT_TOURNAMENT_LIST_ALL)
-                    elif response_user < 0:
-                        response_user = ""
-                        print(language.ERROR_INPUT_CHOICE)
-                    elif response_user > count_of_tournaments:
-                        response_user = ""
-                        print(language.ERROR_INPUT_CHOICE)
-                    else:
-                        wait_input = False
+                response_user = self.input_number_tournament()
 
                 # players by last_name in tournament
                 Session = sessionmaker(bind=ENGINE)
@@ -441,12 +380,13 @@ class Menu:
                     p_id = self.control_player.reorder_players_by_rank(
                         tournament)
                 self.views_rapports.listing_players_tournaments(
-                        response_user, players_listing,
-                        language.RAPPORT_TOURNAMENT_LIST_BY_RANK
-                    )
+                    response_user, players_listing,
+                    language.RAPPORT_TOURNAMENT_LIST_BY_RANK)
                 self.generate.rapport_pdf_for_players(
                     players_listing,
-                    language.RAPPORT_TOURNAMENT_LIST_BY_RANK)
+                    (language.RAPPORT_TOURNAMENT_LIST_BY_RANK +
+                     "\n" + language.STR_PLAYER_TOURNAMENT_1 +
+                     str(response_user)))
                 sleep(1)
 
             elif response_user == 3:
@@ -460,16 +400,67 @@ class Menu:
                 sleep(1)
 
             elif response_user == 4:
-                all_rounds = self.control_tournament.extract_all_rounds()
-                for info_round in all_rounds:
-                    self.views_players.watch_player_details(info_round)
-
-            elif response_user == 5:
-                # list matchs by tournament
-                print("travaux")
+                response_user = self.input_number_tournament()
+                one_tournament = self.control_tournament.extract_one(
+                    int(response_user))
+                listing = [language.STR_PLAYER_TOURNAMENT_1 +
+                           str(response_user), language.STR_TOURNAMENT_2 +
+                           one_tournament.name,
+                           one_tournament.rounds_details_1,
+                           one_tournament.rounds_details_2,
+                           one_tournament.rounds_details_3,
+                           one_tournament.rounds_details_4
+                           ]
+                self.generate.rapport_pdf_for_tournament(
+                    listing,
+                    language.RAPPORT_LIST_ROUNDS_OF_TOURNAMENT)
+                self.views_rapports.listing_rapport(
+                    language.RAPPORT_LIST_ROUNDS_OF_TOURNAMENT, listing)
+                sleep(1)
 
             elif response_user == 0:
                 execute = False
+
+    def input_number_tournament(self):
+        count_of_tournaments, \
+            last_tournament = self.control_tournament.extract_last()
+        wait_input = True
+        response_user = ""
+        while wait_input:
+            response_user = ""
+            while isinstance(response_user, str):
+                try:
+                    response_user = int(
+                        self.views_rapports.input_number_tournament())
+                except TypeError:
+                    self.views_error.input_choice()
+                except ValueError:
+                    self.views_error.input_choice()
+            if response_user == 0:
+                all_tournaments = self.control_tournament.extract_all()
+                listing_tour = ""
+                for tour in all_tournaments:
+                    listing_tour += language.STR_TOURNAMENT_1
+                    listing_tour += str(tour.tournament_id)
+                    listing_tour += "\n"
+                    listing_tour += "\t" + str(tour.name)
+                    listing_tour += " "
+                    listing_tour += language.STR_TOURNAMENT_STARTED
+                    listing_tour += tour.date_started.strftime(
+                        '%d/%m/%Y %H:%M:%S')
+                    listing_tour += "\n"
+                self.generate.rapport_pdf_for_players_tournament(
+                    listing_tour,
+                    language.RAPPORT_TOURNAMENT_LIST_ALL)
+            elif response_user < 0:
+                response_user = ""
+                print(language.ERROR_INPUT_CHOICE)
+            elif response_user > count_of_tournaments:
+                response_user = ""
+                print(language.ERROR_INPUT_CHOICE)
+            else:
+                wait_input = False
+        return response_user
 
 
 class GeneratePDF:
@@ -479,7 +470,7 @@ class GeneratePDF:
         document.add_page()
         document.set_font('helvetica', size=12)
         document.set_title(title)
-        document.cell(txt=title)
+        document.multi_cell(w=0, txt=title)
         document.ln(10)
         for element in listing:
             document.cell(txt=str(element))
@@ -493,7 +484,7 @@ class GeneratePDF:
     def rapport_pdf_for_tournament(listing, title):
         document = FPDF()
         document.add_page()
-        document.set_font('helvetica', size=12)
+        document.set_font('helvetica', size=10)
         document.set_title(title)
         document.cell(txt=title)
         document.ln(10)
@@ -511,7 +502,7 @@ class GeneratePDF:
         document.add_page()
         document.set_font('helvetica', size=12)
         document.set_title(title)
-        document.cell(txt=title)
+        document.multi_cell(w=0, txt=title)
         document.ln(10)
         document.multi_cell(w=0, txt=str(listing))
         path = os.path.join(EXPORT_DIR, title[3:-4] + ".pdf")

@@ -70,7 +70,7 @@ class Match(Base):
     def __str__(self):
         return f"Player ID N°{self.player_1.player_id} " \
                f" {self.player_1.last_name} {self.player_1.first_name} " \
-               f"{language.STR_SCORE} {self.result_player_1}" \
+               f"{language.STR_SCORE} {self.result_player_1} " \
                f"{language.STR_SCORE2} \n" \
                f"Player ID N°{self.player_2.player_id} " \
                f" {self.player_2.last_name} {self.player_2.first_name} " \
@@ -103,16 +103,26 @@ class Rounds(Base):
         self.date_started = date
 
     def __str__(self):
-        return f"""{language.STR_ROUNDS_1} {self.round_id} 
-    {language.STR_ROUND_STARTED} 
-    {self.date_started.strftime('%d/%m/%Y %H:%M:%S')} 
-        Match1 id N°{self.match1_id} : {self.match1_details}
-        Match2 id N°{self.match2_id} : {self.match2_details}
-        Match3 id N°{self.match3_id} : {self.match3_details}
-        Match4 id N°{self.match4_id} : {self.match4_details}
-    {language.STR_ROUND_FINISHED} 
-    {self.date_finished.strftime('%d/%m/%Y %H:%M:%S')}  
-        """
+        return f"----------------------------------------\n" \
+               f"{language.STR_ROUNDS_1} {self.round_id} \n" \
+               f"{self.name_round}" \
+               f"\n {language.STR_ROUND_STARTED} " \
+               f"{self.date_started.strftime('%d/%m/%Y %H:%M:%S')} " \
+               f"\n----------------------------------------\n"\
+               f"\nMatch1 ID N°{self.match1_id} : " \
+               f"\n{self.match1_details}" \
+               f"\n----------------------------------------\n"\
+               f"\nMatch2 ID N°{self.match2_id} : " \
+               f"\n{self.match2_details}" \
+               f"\n----------------------------------------\n"\
+               f"\nMatch3 ID N°{self.match3_id} : " \
+               f"\n{self.match3_details}" \
+               f"\n----------------------------------------\n"\
+               f"\nMatch4 ID N°{self.match4_id} : " \
+               f"\n{self.match4_details}" \
+               f"\n"\
+               f"\n{language.STR_ROUND_FINISHED} " \
+               f"{self.date_finished.strftime('%d/%m/%Y %H:%M:%S')} \n"
 
 
 class PlayersForTournament(Base):
@@ -247,4 +257,4 @@ class Tournament(Base):
                f"\n\t{language.STR_TOURNAMENT_6} {self.time_controller} " \
                f"\n\t{language.STR_TOURNAMENT_7} {self.description} " \
                f"{self.listing_players_tournament} \n" \
-               f"{self.finished}\n"
+               f"{language.STR_TOURNAMENT_FINISHED} {self.finished}\n"

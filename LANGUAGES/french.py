@@ -15,22 +15,25 @@ STR_PLAYER_TOURNAMENT_rank = "N° "
 STR_PLAYER_TOURNAMENT_rank2 = " au classement"
 
 STR_TOURNAMENT_1 = "Voici les détails du tournoi - ID N°"
-STR_TOURNAMENT_2 = "Nom du tournoi :"
+STR_TOURNAMENT_2 = "Nom du tournoi : "
 STR_TOURNAMENT_3 = "Date de début de tournoi et son Lieu : le "
 STR_TOURNAMENT_4 = "Tournoi réalisé en "
 STR_TOURNAMENT_5 = "tours"
 STR_TOURNAMENT_6 = "Le contrôle de temps est le"
 STR_TOURNAMENT_7 = "Description du tournoi : "
-STR_TOURNAMENT_STARTED = "Date de début de tournoi"
+STR_TOURNAMENT_STARTED = "Date de début de tournoi : "
+STR_TOURNAMENT_FINISHED = "Date de fin de tournoi : "
+
 
 STR_MATCH_1 = "Il s'agit du match ID n°"
 STR_MATCH_2 = "avec la configuration : "
 STR_SCORE = "(score="
 STR_SCORE2 = "point)"
-STR_ROUNDS_1 = "Il s'agit du Tour ID n°"
+STR_ROUNDS_1 = "Tours ID n°"
 STR_ROUNDS_2 = "avec les match ID N°"
 STR_ROUND_STARTED = "Date et Heure de Début : "
 STR_ROUND_FINISHED = "Date et Heure de Fin : "
+ROUNDS_NAME = "Tours N°"
 #####################
 # CONTROLLER
 RETURN_MAIN_MENU = "--- Retour au menu principal ---"
@@ -74,7 +77,9 @@ INFORM_CREATE_TOURNAMENT = "Vous avez sélectionné la création d'un nouveau" \
                            "merci de completer les champs requis : "
 INPUT_TOURNAMENT_NAME = "Nom du Tournoi : "
 INPUT_TOURNAMENT_LOCATION = "Lieu du Tournoi : "
-INFORM_INPUT_PLAYERS = "Merci de saisir les ID des 8 joueurs pour le " \
+INFORM_INPUT_PLAYERS = "Si vous souhaitez avoir la liste des joueurs en" \
+                        " base de données TAPER LE CHOIX 0 \n " \
+                       "Merci de saisir les ID des 8 joueurs pour le " \
                        "tournoi : "
 ERROR_INPUT_PLAYER = " Merci de saisir un ID de joueur valide svp !"
 LISTING_PLAYERS_TO_CONFIRM = "Voici la liste des joueurs que vous avez " \
@@ -120,7 +125,7 @@ SUMMARY_MENU_RAPPORT = """
                 Choix 22 : par classement
             
             Liste de tous les tournois : Choix 3
-            Liste de tous les tours/matchs d'un tournoi : Choix 4
+            Liste de tous les tours et matchs d'un tournoi : Choix 4
                     
             Choix 0 => Retour au menu principal
 -------------------------------------------------------------------
@@ -137,14 +142,15 @@ RAPPORT_TOURNAMENT_LIST_BY_RANK = "--- Listing des Joueurs dans un Tournoi" \
                                    " - Tri par Classement de joueurs ---"
 RAPPORT_TOURNAMENT_LIST_ALL = "--- Listing des Tournoi - " \
                               "Tri par ID de Tournoi ---"
-RAPPORT_LIST_ROUNDS_OF_TOURNAMENT = "--- Listing des Tours d'un tournoi ---"
+RAPPORT_LIST_ROUNDS_OF_TOURNAMENT = "--- Listing des Tours & Matchs " \
+                                    "d'un tournoi ---"
 RAPPORT_LIST_MATCHS_OF_TOURNAMENT = "--- Listing des Matchs d'un tournoi ---"
 RAPPORT_INPUT_NUMBER_TOURNAMENT = "Merci de saisir l'ID de Tournoi pour" \
                                   " l'extraction : \n"\
                                 "Si vous souhaitez avoir la " \
                                   "liste des tournois en" \
                                 " base de données TAPER LE CHOIX 0 \n "
-INPUT_NUMBER_TOURNAMENT = "Merci de saisir l'ID du Tournoi concerné svp :"
+INPUT_NUMBER_TOURNAMENT = "Merci de saisir l'ID du Tournoi concerné svp : "
 # ROUNDS
 CHOICE_ADD_ROUNDS = "Choix 3 : Ajouter un nouveau tour au tournoi"
 SUMMARY_SUBMENU_ROUNDS = """
@@ -183,4 +189,3 @@ ERROR_SELECT_PLAYER_INTO_DB = "ERREUR : Merci de taper un ID de joueur" \
                               " présent dans la base de données svp."
 YOU_SELECT = "Vous avez sélectionné : "
 INPUT_NEW_RANK = "Merci de saisir le nouveau classement du joueur svp : "
-
