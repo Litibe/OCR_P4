@@ -43,15 +43,15 @@ CHOICE_RETURN_MAIN_MENU = "Choix 0 : retour au menu principal"
 # MAIN_MENU
 SUMMARY_MAIN_MENU = """
 ---------------------------------------------------------------
-♖♖♖ Bienvenue sur le programme de tournoi du Club d'Echec ! ♖♖♖ 
-    Au Sommaire : 
+♖♖♖ Bienvenue sur le programme de tournoi du Club d'Echec !♖♖♖
+    Au Sommaire :
             Choix 1 : Accès au Menu BASE DE DONNEES :
                         - Gestion des joueurs
             Choix 2 : Accès au Menu TOURNOI ♖
             Choix 3 : Accès au Menu RAPPORTS
-            
             Choix 0 : Sortie du programme
--------------------------------------------------------------"""
+-------------------------------------------------------------
+"""
 WHAT_DO_YOU_WANT = "Que souhaitez vous faire : "
 ERROR_INPUT_CHOICE = "\n Merci de saisir un choix valide !"
 ERROR_INPUT_DATE = "\n Merci de saisir une date valide !"
@@ -60,9 +60,8 @@ CONFIRM_INPUT = "Est ce que vous confirmez votre saisie ? (y/n) "
 # MENU_TOURNAMENT
 SUMMARY_MENU_TOURNAMENT = """
 --------------------------------------------------------------------
-    --- Menu TOURNOI --- 
+    --- Menu TOURNOI ---
 """
-
 CREATE_NEW_TOURNAMENT = "Choix 1 : ♖ Créer un nouveau tournoi ♖"
 ADD_PLAYERS_FOR_TOURNAMENT = "Choix 2 : Ajouter les huits joueurs pour " \
                              "le tournoi"
@@ -119,14 +118,13 @@ SUMMARY_MENU_RAPPORT = """
                 Choix 11 : par ordre alphabétique
                 Choix 12 : par classement
                 Choix 13 : par ID de joueur
-              
-            Liste de tous les Joueurs d'un tournoi 
+            Liste de tous les Joueurs d'un tournoi
                 Choix 21 : par ordre alphabétique
                 Choix 22 : par classement
-            
-            Liste de tous les tournois : Choix 3
-            Liste de tous les tours et matchs d'un tournoi : Choix 4
-                    
+            Liste de tous les tournois :
+                Choix 3
+            Liste de tous les tours et matchs d'un tournoi :
+                Choix 4
             Choix 0 => Retour au menu principal
 -------------------------------------------------------------------
 """
@@ -155,7 +153,7 @@ INPUT_NUMBER_TOURNAMENT = "Merci de saisir l'ID du Tournoi concerné svp : "
 CHOICE_ADD_ROUNDS = "Choix 3 : Ajouter un nouveau tour au tournoi"
 SUMMARY_SUBMENU_ROUNDS = """
 ----------------------------------------------------------------
-    --- Sous Menu ROUNDS/TOURS --- 
+    --- Sous Menu ROUNDS/TOURS ---
 """
 ROUNDS1_NONE = "Lancement du Round 1 "
 ROUNDS2_NONE = "Lancement du Round 2 "
@@ -175,17 +173,16 @@ SUMMARY_SUBMENU_DATABASE = """
     --- Menu BASE DE DONNEES ---
             Choix 1 : Ajouter un joueur dans la base de données
             Choix 2 : Monter le classement d'un joueur manuellement
-                 
             Choix 0 : Retour au menu principal
 --------------------------------------------------------------------
 """
-CHOICE_UPDATE_RANK_PLAYER = "Vous avez choisi de MONTER " \
+CHOICE_UPDATE_RANK_PLAYER = "Vous avez choisi de MONTER "\
                             "un joueur au classement : \n"\
-                            "Si vous souhaitez avoir la liste des joueurs en" \
+                            "Si vous souhaitez avoir la liste des joueurs en"\
                             " base de données TAPER LE CHOIX 0 \n "
 INPUT_ID_PLAYER = "Merci de saisir l'ID du joueur svp : "
 UPDATE_RANK_PLAYER = "Vous avez choisi de modifier "
-ERROR_SELECT_PLAYER_INTO_DB = "ERREUR : Merci de taper un ID de joueur" \
+ERROR_SELECT_PLAYER_INTO_DB = "ERREUR : Merci de taper un ID de joueur"\
                               " présent dans la base de données svp."
 YOU_SELECT = "Vous avez sélectionné : "
 INPUT_NEW_RANK = "Merci de saisir le nouveau classement du joueur svp : "
