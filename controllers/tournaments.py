@@ -1,7 +1,7 @@
 from random import randint
 from sqlalchemy.orm import sessionmaker
 
-import constants
+from utils import constants
 from controllers import base, players
 from LANGUAGES import french as language
 from models import models

@@ -103,9 +103,23 @@ de nouveau réalisé, cela "écrasera" le précédent fichier .PDF
 
 ### Possible traduction du programme : 
 Le présent programme a été rédigé en français, vous avez la possibilité de le
-traduire intégralement dans la langue de votre choix, en remplaçant les textes
-présents dans le fichier "french.py" présent dans le dossier "LANGUAGUES".
-Ce fichier contient tous les prints de console.
+traduire intégralement en anglais.
+Pour cela vous avez juste à modifier l'import de langue dans les fichiers
+suivants en remplaçant "french" par "english".
+Le choix de la langue sera déterminante pour la base de données.
+
+```shell
+# import pour langue française
+from LANGUAGES import french as language
+# import pour langue anglaise
+from LANGUAGES import english as language
+# à modifier dans les fichiers suivants :
+/controllers/base.py line 13
+/controllers/players.py line 4
+/controllers/tournament.py line 6
+/models/models.py line 1
+/views/base.py line 4
+```
 
  ###Génération Rapport Flake8
 

@@ -7,7 +7,7 @@ from fpdf import FPDF
 from sqlalchemy import create_engine, MetaData
 from sqlalchemy.orm import sessionmaker
 
-import constants
+from utils import constants
 from controllers.players import ControllersPlayers
 from controllers.tournaments import ControllersTournament
 from LANGUAGES import french as language
@@ -454,10 +454,10 @@ class Menu:
                     language.RAPPORT_TOURNAMENT_LIST_ALL)
             elif response_user < 0:
                 response_user = ""
-                print(language.ERROR_INPUT_CHOICE)
+                self.views_error.input_choice()
             elif response_user > count_of_tournaments:
                 response_user = ""
-                print(language.ERROR_INPUT_CHOICE)
+                self.views_error.input_choice()
             else:
                 wait_input = False
         return response_user

@@ -1,5 +1,5 @@
 from LANGUAGES import french as language
-import constants
+from utils import constants
 
 from sqlalchemy import Column, Integer, Float, \
     String, ForeignKey, Date, DateTime
