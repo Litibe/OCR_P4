@@ -107,4 +107,11 @@ traduire intégralement dans la langue de votre choix, en remplaçant les textes
 présents dans le fichier "french.py" présent dans le dossier "LANGUAGUES".
 Ce fichier contient tous les prints de console.
 
- 
+ ###Génération Rapport Flake8
+
+Après avoir activé l'environnement virtuel, entrez la commande suivante :
+```shell
+flake8 --format=html --htmldir=flake_rapport
+```
+Un rapport sera généré dans le dossier "flake_rapport", avec comme argument 
+"max-line-length" défini par défaut à 79 caractères par ligne si non précisé.
