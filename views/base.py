@@ -170,6 +170,8 @@ class Players:
                     print(language.ERROR_INPUT_CHOICE)
             except TypeError:
                 print(language.ERROR_INPUT_CHOICE)
+            except ValueError:
+                print(language.ERROR_INPUT_CHOICE)
         return modify_rank
 
     @staticmethod
