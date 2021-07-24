@@ -94,6 +94,11 @@ au premier lancement du programme pour la gestion et la sauvegarde des données.
 La base de données peut-être lu par un programme extérieur comme 
 ["DB Browser"](https://sqlitebrowser.org)
 
+NB : Dans le menu "Base de données" choix 1 au menu principal, vous pouvez
+en saisissant le choix 999 (code caché) ajouter six joueurs
+fictifs à titre de démonstrations. Ainsi vous aurez que deux joueurs à créer 
+pour le lancement d'un tournoi à huits joueurs.
+
 ### Export des données en PDF :
 Le programme va créer dans le dossier "OCR_P4", 
 un dossier "EXPORT_PDF" contenant la génération des différents fichiers PDF 
