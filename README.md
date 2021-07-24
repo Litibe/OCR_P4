@@ -66,12 +66,9 @@ en effet, le programme dispose d'une interface dans le terminal.
                         - Gestion des joueurs
             Choix 2 : Accès au Menu TOURNOI ♖
             Choix 3 : Accès au Menu RAPPORTS
-            
             Choix 0 : Sortie du programme
 -------------------------------------------------------------
 ```
-
-
 ***
 ## Résultats du programme : 
 ### Interruption du programme : 
@@ -82,23 +79,26 @@ du dernier Tournoi présent en base de données.
 
 ### Base de Données : 
 Le présent programme utilise une base SQL géré par SQLAlchemy pour la 
-sauvegarde des différents renseignements intégrés au cours du jeu .
+sauvegarde des différents renseignements intégrés au cours du jeu.
 
-Sauvegarde des caractéristiques des :
+Sauvegarde des caractéristiques (= 1 Table SQL) des :
+- Joueurs inscrits au Club d'échec (avec un ID de joueurs unique)
 - Tournois
-- Listes de Joueurs associées à un Tournoi
-- Liste des Joueurs du Club (ID de joueurs Unique)
-- Liste des Tours de jeu
-- Liste des différents matchs de jeu
+- Huits joueurs adversaires dans un tournoi 
+- Tours de jeu d'un tournoi
+- Matchs de jeu d'un tournoi
 
-=> Un fichier "base_sql.db" sera généré au premier lancement du programme
-pour la gestion et la sauvegarde des données.
+=> Un fichier "base_sql.db" sera généré, à la racine du dossier OCR_P4, 
+au premier lancement du programme pour la gestion et la sauvegarde des données.
+
+La base de données peut-être lu par un programme extérieur comme 
+["DB Browser"](https://sqlitebrowser.org)
 
 ### Export des données en PDF :
 Le programme va créer dans le dossier "OCR_P4", 
 un dossier "EXPORT_PDF" contenant la génération des différents fichiers PDF 
 au cours de l'utilisation du programme. Cependant, si une même exécution est
-de nouveau réalisé, cela "écrasera" le précédent fichier .PDF
+de nouveau réalisé, cela "écrasera" le précédent fichier .PDF du même nom.
 
 
 ### Possible traduction du programme : 

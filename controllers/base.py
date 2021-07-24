@@ -89,7 +89,7 @@ class Menu:
         run = True
         while run:
             self.views_menu.main_database()
-            choice = [0, 1, 2]
+            choice = [0, 1, 2, 999]
             response_user = ""
             while response_user not in choice:
                 try:
@@ -133,6 +133,69 @@ class Menu:
 
             elif response_user == 0:
                 run = False
+
+            # Menu caché pour ajout de joueurs de démonstration
+            elif response_user == 999:
+                Session = sessionmaker(bind=ENGINE)
+                session = Session()
+                count_of_players = session.query(
+                    models.Players.player_id).count()
+                p1 = models.Players(
+                    "DARIANOV",
+                    "Mathilda",
+                    datetime.datetime.strptime("12/05/1972", '%d/%m/%Y'),
+                    "F", rank=count_of_players + 1
+                    )
+                session.add(p1)
+                p2 = models.Players(
+                    "BRETIGNOL",
+                    "Thierry",
+                    datetime.datetime.strptime("02/11/1961", '%d/%m/%Y'),
+                    "M", rank=count_of_players + 2
+                )
+                session.add(p2)
+                p3 = models.Players(
+                    "DOURAY",
+                    "Laurène",
+                    datetime.datetime.strptime("19/12/1988", '%d/%m/%Y'),
+                    "F", rank=count_of_players + 3
+                )
+                session.add(p3)
+                p4 = models.Players(
+                    "SOURDAIS",
+                    "Pierre",
+                    datetime.datetime.strptime("01/02/1958", '%d/%m/%Y'),
+                    "M", rank=count_of_players + 4
+                )
+                session.add(p4)
+                p5 = models.Players(
+                    "SAMSON",
+                    "Elodie",
+                    datetime.datetime.strptime("03/08/1992", '%d/%m/%Y'),
+                    "F", rank=count_of_players + 5
+                )
+                session.add(p5)
+                p6 = models.Players(
+                    "GILLES",
+                    "Amélie",
+                    datetime.datetime.strptime("23/05/1989", '%d/%m/%Y'),
+                    "F", rank=count_of_players + 6
+                )
+                session.add(p6)
+                session.commit()
+                p1 = self.control_player.extract_one_by_id(count_of_players+1)
+                p2 = self.control_player.extract_one_by_id(count_of_players+2)
+                p3 = self.control_player.extract_one_by_id(count_of_players+3)
+                p4 = self.control_player.extract_one_by_id(count_of_players+4)
+                p5 = self.control_player.extract_one_by_id(count_of_players+5)
+                p6 = self.control_player.extract_one_by_id(count_of_players+6)
+
+                self.views_players.watch_player_details(p1)
+                self.views_players.watch_player_details(p2)
+                self.views_players.watch_player_details(p3)
+                self.views_players.watch_player_details(p4)
+                self.views_players.watch_player_details(p5)
+                self.views_players.watch_player_details(p6)
 
     def main_tournament(self):
         execute = True

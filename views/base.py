@@ -250,6 +250,10 @@ class Tournament:
         return name, location
 
     @staticmethod
+    def watch_choice_time():
+        print(language.SELECT_CONTROL_TIME)
+
+    @staticmethod
     def watch_choice_time_to_choice(i, element):
         print(f" \t Choix {i} pour {element}")
 
@@ -268,7 +272,6 @@ class Tournament:
 
     @staticmethod
     def input_tournament_choice_time():
-        print(language.SELECT_CONTROL_TIME)
         choice_time = int(input(language.YOUR_CHOICE))
         return choice_time
 

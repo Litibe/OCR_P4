@@ -27,6 +27,7 @@ class ControllersTournament:
         name, location = self.views_tournaments.input_name_location()
         date = base.create_datetime_now()
         i = 1
+        self.views_tournaments.watch_choice_time()
         for element in language.CHOICE_TIME:
             self.views_tournaments.watch_choice_time_to_choice(i, element)
             i += 1
@@ -50,6 +51,10 @@ class ControllersTournament:
                                        date,
                                        constants.NUMBER_OF_ROUNDS,
                                        time_controller, description)
+        self.add_tournament_in_db(tournament)
+
+    @staticmethod
+    def add_tournament_in_db(tournament):
         Session = sessionmaker(bind=base.ENGINE)
         session = Session()
         session.add(tournament)
