@@ -18,6 +18,7 @@ class Players(Base):
     birthday = Column(Date)
     sex = Column(String)
     rank = Column(Integer)
+    pts_rank = Column(Float)
     pts_tournament = Column(Float)
     adversary_tournament = Column(String)
 
@@ -27,20 +28,26 @@ class Players(Base):
         self.birthday = birthday
         self.sex = sex
         self.rank = rank
+        self.pts_rank = 0
 
     def __str__(self):
         if self.pts_tournament is None:
-            self.pts = ""
+            self.pts_matchs = ""
         else:
-            self.pts = f"{self.pts_tournament} "\
-                       f"{language.STR_PLAYER_PTS_TOURNAMENT2}"
+            self.pts_matchs = f"{language.STR_PLAYER_PTS_TOURNAMENT} " \
+                              f"{self.pts_tournament} "\
+                              f"{language.STR_PLAYER_PTS_TOURNAMENT2}"
         return f"{language.STR_PLAYER_1}{self.player_id} - {self.last_name} " \
                f"{self.first_name} - " \
                f"{self.birthday.strftime('%d/%m/%Y')} - " \
                f"{language.STR_PLAYER_3}" \
                f"{self.sex} - {language.STR_PLAYER_RANK} " \
                f"{self.rank} {language.STR_PLAYER_RANK2} - " \
-               f"{self.pts}"
+               f"{language.STR_PLAYER_PTS_TOURNAMENT} " \
+               f"{self.pts_rank} "\
+               f"{language.STR_PLAYER_PTS} " \
+               f"{language.STR_PLAYER_RANK2} - " \
+               f"{self.pts_matchs}"
 
     def watch_pts_tournament(self):
         return f"{self.last_name} {self.first_name} " \
@@ -165,40 +172,121 @@ class PlayersForTournament(Base):
         self.id_player8 = id8
 
     def __str__(self):
+        if self.player_1.pts_tournament is None:
+            self.player_1_pts_matchs = ""
+        else:
+            self.player_1_pts_matchs = f"{language.STR_PLAYER_PTS_TOURNAMENT}"\
+                              f" {self.player_1.pts_tournament} " \
+                              f"{language.STR_PLAYER_PTS_TOURNAMENT2}"
+        if self.player_2.pts_tournament is None:
+            self.player_2_pts_matchs = ""
+        else:
+            self.player_2_pts_matchs = f"{language.STR_PLAYER_PTS_TOURNAMENT}"\
+                              f" {self.player_2.pts_tournament} " \
+                              f"{language.STR_PLAYER_PTS_TOURNAMENT2}"
+        if self.player_3.pts_tournament is None:
+            self.player_3_pts_matchs = ""
+        else:
+            self.player_3_pts_matchs = f"{language.STR_PLAYER_PTS_TOURNAMENT}"\
+                              f" {self.player_3.pts_tournament} " \
+                              f"{language.STR_PLAYER_PTS_TOURNAMENT2}"
+        if self.player_4.pts_tournament is None:
+            self.player_4_pts_matchs = ""
+        else:
+            self.player_4_pts_matchs = f"{language.STR_PLAYER_PTS_TOURNAMENT}"\
+                              f" {self.player_4.pts_tournament} " \
+                              f"{language.STR_PLAYER_PTS_TOURNAMENT2}"
+        if self.player_5.pts_tournament is None:
+            self.player_5_pts_matchs = ""
+        else:
+            self.player_5_pts_matchs = f"{language.STR_PLAYER_PTS_TOURNAMENT}"\
+                              f" {self.player_5.pts_tournament} " \
+                              f"{language.STR_PLAYER_PTS_TOURNAMENT2}"
+        if self.player_6.pts_tournament is None:
+            self.player_6_pts_matchs = ""
+        else:
+            self.player_6_pts_matchs = f"{language.STR_PLAYER_PTS_TOURNAMENT}"\
+                              f" {self.player_6.pts_tournament} " \
+                              f"{language.STR_PLAYER_PTS_TOURNAMENT2}"
+        if self.player_7.pts_tournament is None:
+            self.player_7_pts_matchs = ""
+        else:
+            self.player_7_pts_matchs = f"{language.STR_PLAYER_PTS_TOURNAMENT}"\
+                              f" {self.player_7.pts_tournament} " \
+                              f"{language.STR_PLAYER_PTS_TOURNAMENT2}"
+        if self.player_8.pts_tournament is None:
+            self.player_8_pts_matchs = ""
+        else:
+            self.player_8_pts_matchs = f"{language.STR_PLAYER_PTS_TOURNAMENT}"\
+                              f" {self.player_8.pts_tournament} " \
+                              f"{language.STR_PLAYER_PTS_TOURNAMENT2}"
+
         return f"\n{language.STR_PLAYER_TOURNAMENT_1}" \
                f"{self.players_tournament_id} : " \
                f"\n\tID N°{self.id_player1} --- " \
                f"{self.player_1.last_name} {self.player_1.first_name} --- " \
                f"{language.STR_PLAYER_TOURNAMENT_rank}{self.player_1.rank}" \
-               f"{language.STR_PLAYER_TOURNAMENT_rank2}" \
+               f"{language.STR_PLAYER_TOURNAMENT_rank2} - "\
+               f"{language.STR_PLAYER_PTS_TOURNAMENT} - " \
+               f"{self.player_1.pts_rank} " \
+               f"{language.STR_PLAYER_PTS} - " \
+               f"{self.player_1_pts_matchs}" \
                f"\n\tID N°{self.id_player2} --- " \
                f"{self.player_2.last_name} {self.player_2.first_name} --- " \
                f"{language.STR_PLAYER_TOURNAMENT_rank}{self.player_2.rank}" \
-               f"{language.STR_PLAYER_TOURNAMENT_rank2}" \
+               f"{language.STR_PLAYER_TOURNAMENT_rank2} - " \
+               f"{language.STR_PLAYER_PTS_TOURNAMENT} " \
+               f"{self.player_2.pts_rank} " \
+               f"{language.STR_PLAYER_PTS} - " \
+               f"{self.player_2_pts_matchs}" \
                f"\n\tID N°{self.id_player3} --- " \
                f"{self.player_3.last_name} {self.player_3.first_name} --- " \
                f"{language.STR_PLAYER_TOURNAMENT_rank}{self.player_3.rank}" \
-               f"{language.STR_PLAYER_TOURNAMENT_rank2}" \
+               f"{language.STR_PLAYER_TOURNAMENT_rank2} - " \
+               f"{language.STR_PLAYER_PTS_TOURNAMENT} " \
+               f"{self.player_3.pts_rank} " \
+               f"{language.STR_PLAYER_PTS} - " \
+               f"{self.player_3_pts_matchs}" \
                f"\n\tID N°{self.id_player4} --- " \
                f"{self.player_4.last_name} {self.player_4.first_name} --- " \
                f"{language.STR_PLAYER_TOURNAMENT_rank}{self.player_4.rank}" \
-               f"{language.STR_PLAYER_TOURNAMENT_rank2}" \
+               f"{language.STR_PLAYER_TOURNAMENT_rank2} -" \
+               f"{language.STR_PLAYER_PTS_TOURNAMENT} " \
+               f"{self.player_4.pts_rank} " \
+               f"{language.STR_PLAYER_PTS} - " \
+               f"{self.player_4_pts_matchs}" \
                f"\n\tID N°{self.id_player5} --- " \
                f"{self.player_5.last_name} {self.player_5.first_name} --- " \
                f"{language.STR_PLAYER_TOURNAMENT_rank}{self.player_5.rank}" \
-               f"{language.STR_PLAYER_TOURNAMENT_rank2} " \
+               f"{language.STR_PLAYER_TOURNAMENT_rank2} - " \
+               f"{language.STR_PLAYER_PTS_TOURNAMENT} " \
+               f"{self.player_5.pts_rank} " \
+               f"{language.STR_PLAYER_PTS} - " \
+               f"{self.player_5_pts_matchs}" \
                f"\n\tID N°{self.id_player6} --- " \
                f"{self.player_6.last_name} {self.player_6.first_name} --- " \
                f"{language.STR_PLAYER_TOURNAMENT_rank}{self.player_6.rank}" \
-               f"{language.STR_PLAYER_TOURNAMENT_rank2}" \
+               f"{language.STR_PLAYER_TOURNAMENT_rank2} - " \
+               f"{language.STR_PLAYER_PTS_TOURNAMENT} " \
+               f"{self.player_6.pts_rank} " \
+               f"{language.STR_PLAYER_PTS} - " \
+               f"{self.player_6_pts_matchs}" \
                f"\n\tID N°{self.id_player7} --- " \
                f"{self.player_7.last_name} {self.player_7.first_name} --- " \
                f"{language.STR_PLAYER_TOURNAMENT_rank}{self.player_7.rank}" \
-               f"{language.STR_PLAYER_TOURNAMENT_rank2}" \
+               f"{language.STR_PLAYER_TOURNAMENT_rank2} - " \
+               f"{language.STR_PLAYER_PTS_TOURNAMENT} " \
+               f"{self.player_7.pts_rank} " \
+               f"{language.STR_PLAYER_PTS} - " \
+               f"{self.player_7_pts_matchs}" \
                f"\n\tID N°{self.id_player8} --- " \
                f"{self.player_8.last_name} {self.player_8.first_name} --- " \
                f"{language.STR_PLAYER_TOURNAMENT_rank}{self.player_8.rank}" \
-               f"{language.STR_PLAYER_TOURNAMENT_rank2}"
+               f"{language.STR_PLAYER_TOURNAMENT_rank2} - " \
+               f"{language.STR_PLAYER_PTS_TOURNAMENT} " \
+               f"{self.player_8.pts_rank} " \
+               f"{language.STR_PLAYER_PTS} - " \
+               f"{self.player_8_pts_matchs}"
 
 
 class Tournament(Base):

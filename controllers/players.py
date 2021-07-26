@@ -193,6 +193,16 @@ class ControllersPlayers:
         session.commit()
 
     @staticmethod
+    def update_pts_rank(id_player):
+        Session = sessionmaker(bind=base.ENGINE)
+        session = Session()
+        player = session.query(models.Players).get(
+            {"player_id": str(id_player)})
+        pts_match = player.pts_tournament
+        player.pts_rank += float(pts_match)
+        session.commit()
+
+    @staticmethod
     def update_adversary_match(id_player1, id_player2):
         Session = sessionmaker(bind=base.ENGINE)
         session = Session()
