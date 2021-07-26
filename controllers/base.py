@@ -328,25 +328,17 @@ class Menu:
                 self.views_menu.return_main_menu()
                 # tournament date end
                 self.control_tournament.update_time_finished_tournament()
-                listing_players \
-                    = self.control_tournament.last_listing_players(count)
-                listing_id_actual_tournament = [
-                    listing_players.player_1.player_id,
-                    listing_players.player_2.player_id,
-                    listing_players.player_3.player_id,
-                    listing_players.player_4.player_id,
-                    listing_players.player_5.player_id,
-                    listing_players.player_6.player_id,
-                    listing_players.player_7.player_id,
-                    listing_players.player_8.player_id]
-                for id_player in listing_id_actual_tournament:
-                    self.control_player.erase_pts_match_player(id_player)
+                # generation update pts_rank
+                listing_id = self.listing_players_for_update_player(count)
+                for id_player in listing_id:
+                    self.control_player.update_pts_rank(id_player)
+                # generation rapport tournament
                 count_of_tournaments, \
                     last_tournament = self.control_tournament.extract_last()
                 listing = [language.STR_PLAYER_TOURNAMENT_1 +
                            str(count_of_tournaments),
                            language.STR_TOURNAMENT_2 +
-                           last_tournament.name,
+                           str(last_tournament),
                            last_tournament.rounds_details_1,
                            last_tournament.rounds_details_2,
                            last_tournament.rounds_details_3,
@@ -355,6 +347,10 @@ class Menu:
                 self.generate.rapport_pdf_for_tournament(
                     listing,
                     language.RAPPORT_LIST_ROUNDS_OF_TOURNAMENT)
+                # generation update pts_rank
+                listing_id = self.listing_players_for_update_player(count)
+                for id_player in listing_id:
+                    self.control_player.erase_pts_match_player(id_player)
                 execute = False
 
     def main_rapport(self):
@@ -468,7 +464,7 @@ class Menu:
                     int(response_user))
                 listing = [language.STR_PLAYER_TOURNAMENT_1 +
                            str(response_user), language.STR_TOURNAMENT_2 +
-                           one_tournament.name,
+                           str(one_tournament),
                            one_tournament.rounds_details_1,
                            one_tournament.rounds_details_2,
                            one_tournament.rounds_details_3,
@@ -525,13 +521,27 @@ class Menu:
                 wait_input = False
         return response_user
 
+    def listing_players_for_update_player(self, count):
+        listing_players \
+            = self.control_tournament.last_listing_players(count)
+        listing_id_actual_tournament = [
+            listing_players.player_1.player_id,
+            listing_players.player_2.player_id,
+            listing_players.player_3.player_id,
+            listing_players.player_4.player_id,
+            listing_players.player_5.player_id,
+            listing_players.player_6.player_id,
+            listing_players.player_7.player_id,
+            listing_players.player_8.player_id]
+        return listing_id_actual_tournament
+
 
 class GeneratePDF:
     @staticmethod
     def rapport_pdf_for_players(listing, title):
         document = FPDF()
         document.add_page()
-        document.set_font('helvetica', size=12)
+        document.set_font('helvetica', size=8)
         document.set_title(title)
         document.multi_cell(w=0, txt=title)
         document.ln(10)
@@ -547,7 +557,7 @@ class GeneratePDF:
     def rapport_pdf_for_tournament(listing, title):
         document = FPDF()
         document.add_page()
-        document.set_font('helvetica', size=10)
+        document.set_font('helvetica', size=8)
         document.set_title(title)
         document.cell(txt=title)
         document.ln(10)
@@ -563,7 +573,7 @@ class GeneratePDF:
     def rapport_pdf_for_players_tournament(listing, title):
         document = FPDF()
         document.add_page()
-        document.set_font('helvetica', size=12)
+        document.set_font('helvetica', size=8)
         document.set_title(title)
         document.multi_cell(w=0, txt=title)
         document.ln(10)

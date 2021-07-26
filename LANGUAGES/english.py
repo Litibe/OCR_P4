@@ -6,8 +6,8 @@ STR_PLAYER_3 = "sex:"
 STR_PLAYER_RANK = "No."
 STR_PLAYER_RANK2 = "in the ranking"
 STR_PLAYER_PTS_TOURNAMENT = "with"
-STR_PLAYER_PTS_TOURNAMENT2 = "points"
-
+STR_PLAYER_PTS_TOURNAMENT2 = "points current tournament"
+STR_PLAYER_PTS = "points"
 
 STR_PLAYER_TOURNAMENT_1 = "Here are the IDs of players present" \
                           "during Tournament N °"
